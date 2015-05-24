@@ -29,6 +29,7 @@ public class MelodiaHibernate {
 		em.remove( m );
 	}
 	
+	//igual ya ni me hacen falta estas clases
 	private Melodia findByPrimaryKey( Melodia m ) {
 		TypedQuery<Melodia> q = em.createQuery("from Melodia where id_melodia=:id", Melodia.class);
 		q.setParameter("id", m.getId_melodia() );
