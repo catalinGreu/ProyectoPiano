@@ -100,7 +100,6 @@ public class MyFirstPiano extends JFrame {
 	private JLabel lblIduser;
 	private JLabel lblUser;
 	private JLabel lblImgConect;
-	private JLabel lblNewLabel_1;
 	private JButton btnGuardar;
 
 	/**
@@ -143,10 +142,12 @@ public class MyFirstPiano extends JFrame {
 		if ( connected ) {
 			lblImgConect.setEnabled( true );
 			rec_btn.setEnabled( true );
+			rec_btn.setToolTipText("Pulsa para grabar");
 		}
 		else {
 			lblImgConect.setEnabled( false );
 			rec_btn.setEnabled( false );
+			rec_btn.setToolTipText("Registrate para poder grabar melodias");
 		}
 
 	}
@@ -788,28 +789,19 @@ public class MyFirstPiano extends JFrame {
 		lblImgConect.setBounds(10, 342, 31, 25);
 		contentPane.add(lblImgConect);
 
-		lblNewLabel_1 = new JLabel("");
-		lblNewLabel_1.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/exit.png")));
-		lblNewLabel_1.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-				System.exit( 0 );
-			}
-		});
-
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(1068, 328, 46, 46);
-		contentPane.add(lblNewLabel_1);
-
 		btnGuardar = new JButton("Guardar");
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
+				GuardarMelodia g = new GuardarMelodia();
+				g.setAlwaysOnTop(true);
+				g.setVisible(true);
+				
 				Usuario u = userConnected;
-
-				Melodia m = new Melodia("melodia1", u );
+				
+				//hacer que se espere a que escriba algo en la ventana de dialogo.
+				Melodia m = new Melodia( g.getTxtFieldContent(), u );
 				u.addMelodia( m );
 
 				for (Pulsacion p : listaParaGuardar) {
@@ -837,6 +829,20 @@ public class MyFirstPiano extends JFrame {
 		btnGuardar.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnGuardar.setBounds(1068, 143, 89, 23);
 		contentPane.add(btnGuardar);
+		
+		JButton btnExit = new JButton("");
+		btnExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				System.exit(0);
+			}
+		});
+		btnExit.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/exit.png")));
+		btnExit.setForeground(new Color(0, 0, 0));
+		btnExit.setBackground(new Color(51, 153, 153));
+		btnExit.setBounds(1101, 346, 37, 32);
+		contentPane.add(btnExit);
+		btnExit.setToolTipText("Salir");
 	}
 
 	public static void tick(){		
