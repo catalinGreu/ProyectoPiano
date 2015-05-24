@@ -38,11 +38,11 @@ public class MelodiaHibernate {
 
 	}
 	
-	public List findAll( Melodia m ){
-		TypedQuery<Melodia> q = em.createQuery("from Melodia", Melodia.class );
-		List<Melodia> resultList = q.getResultList();
-		return resultList;
-	}
+//	public List findAll( Melodia m ){
+//		TypedQuery<Melodia> q = em.createQuery("from Melodia", Melodia.class );
+//		List<Melodia> resultList = q.getResultList();
+//		return resultList;
+//	}
 	
 	
 
