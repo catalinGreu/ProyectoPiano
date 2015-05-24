@@ -1,6 +1,4 @@
 package Piano;
-//holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-//cambio mas cosas para actualizar gitHub
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -60,7 +58,7 @@ public class Inicio extends JFrame {
 	private JTextField textFieldUser;
 	private JPasswordField passwordField;
 	protected static final Dimension PREFERRED = new Dimension( 647, 464 );
-	
+
 	private UsuarioHibernate dao;
 	private EntityManager em;
 	private Label labelWarning;
@@ -132,6 +130,7 @@ public class Inicio extends JFrame {
 		panelCentro.setLayout(gbl_panelCentro);
 
 		JLabel lblNewLabel = new JLabel("ID");
+		lblNewLabel.setForeground(new Color(0, 0, 0));
 		lblNewLabel.setBackground(new Color(0, 0, 0));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.fill = GridBagConstraints.VERTICAL;
@@ -169,6 +168,7 @@ public class Inicio extends JFrame {
 		textFieldUser.setColumns(10);
 
 		JLabel lblPassword = new JLabel("Password");
+		lblPassword.setForeground(new Color(0, 0, 0));
 		lblPassword.setBackground(new Color(0, 0, 0));
 		lblPassword.setFont(new Font("SansSerif", Font.BOLD, 15));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
@@ -182,7 +182,7 @@ public class Inicio extends JFrame {
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				
+
 				passwordField.selectAll();
 			}
 		});
@@ -219,9 +219,7 @@ public class Inicio extends JFrame {
 			public void mousePressed(MouseEvent e) {
 
 				compruebaUserYPasswd();
-
 			}
-
 
 		});
 		btnAceptar.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -229,6 +227,14 @@ public class Inicio extends JFrame {
 		panelBotones.add(btnAceptar);
 
 		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+				System.exit( 0 );
+			}
+		});
+		
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnCancelar.setForeground(new Color(0, 0, 0));
 		panelBotones.add(btnCancelar);
@@ -243,7 +249,7 @@ public class Inicio extends JFrame {
 		panelNorth.add(lblNewLabel_2);
 
 		JLabel lblbImg = new JLabel("");
-		lblbImg.setIcon(new ImageIcon(Inicio.class.getResource("/Piano/mp_logo.png")));
+		lblbImg.setIcon(new ImageIcon(Inicio.class.getResource("/Piano/mp_cut.png")));
 		panelNorth.add(lblbImg);
 
 		JLabel lblNewLabel_3 = new JLabel("");
@@ -267,19 +273,23 @@ public class Inicio extends JFrame {
 		JPanel panel = new JPanel();
 		FlowLayout flowLayout_1 = (FlowLayout) panel.getLayout();
 		flowLayout_1.setHgap(10);
-		panel.setBackground(new Color(51, 153, 153));
+		panel.setBackground(new Color(0, 153, 102));
 		panelEste.add(panel, BorderLayout.SOUTH);
 
 		JButton btnNewButton = new JButton("Registro");
+		btnNewButton.setForeground(new Color(0, 0, 0));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed (MouseEvent arg0) {
 
 				Registration r = new Registration();
 				r.setVisible(true);
-				//				r.setPreferredSize( PREFERRED );
-				//				r.pack();
-
+				r.setAlwaysOnTop(true);
+				
+				frameInicio.setVisible(false);
+//				r.pack();
+				r.setPreferredSize( PREFERRED );
+				
 				try {
 					r.setEntityManager( em );
 				} catch (Exception e) {
@@ -293,6 +303,7 @@ public class Inicio extends JFrame {
 		panel.add(btnNewButton);
 
 		JButton btnNewButton_1 = new JButton("Juego Rapido");
+		btnNewButton_1.setForeground(new Color(0, 0, 0));
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
@@ -315,7 +326,7 @@ public class Inicio extends JFrame {
 	}
 
 	public void compruebaUserYPasswd(){
-		
+
 		if (textFieldUser.getText().equals("") || (passwordField.getText().equals(""))) {
 			labelWarning.setText("Introduzca usuario y contraseña" );
 		}
@@ -331,9 +342,10 @@ public class Inicio extends JFrame {
 				userFound = dao.findByPrimaryKey( u );
 			} catch (Exception e1) {
 
+				System.out.println("Usuario no existe, o esta malpuesto");
 				labelWarning.setText("Usuario no existe");
 
-				//				e1.printStackTrace();
+				//e1.printStackTrace();
 			}
 
 			if ( userFound.equals( u ) ) {
@@ -345,14 +357,13 @@ public class Inicio extends JFrame {
 				try {
 					p.setEntityManager(em);
 				} catch (Exception ex) {
-					// TODO Auto-generated catch block
 					ex.printStackTrace();
 				}
 				frameInicio.setVisible( false );
 			}
 			else {
 				labelWarning.setText("No existe el usuario");
-				
+
 			}
 		}
 	}
