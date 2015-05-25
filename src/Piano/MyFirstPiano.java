@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -104,6 +105,7 @@ public class MyFirstPiano extends JFrame {
 	private String idUsuarioConectado;
 
 	private Usuario userConnected;
+	
 	private JLabel lblIduser;
 	private JLabel lblUser;
 	private JLabel lblImgConect;
@@ -155,6 +157,8 @@ public class MyFirstPiano extends JFrame {
 		else {
 			lblImgConect.setEnabled( false );
 			rec_btn.setEnabled( false );
+			btnGuardar.setEnabled(false);
+			
 			rec_btn.setToolTipText("Registrate para poder grabar melodias");
 			btnMisMelodias.setEnabled( false );
 			btnMisMelodias.setToolTipText("No tiene melodias");
@@ -810,13 +814,19 @@ public class MyFirstPiano extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
-				GuardarMelodia g = new GuardarMelodia(this);
-				g.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
-				g.setAlwaysOnTop( true );
-				g.setVisible( true );
-				g.setResizable( false );
+				if ( btnGuardar.isEnabled() ) {
+					
+					GuardarMelodia g = new GuardarMelodia(this);
+					g.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+					g.setAlwaysOnTop( true );
+					g.setVisible( true );
+					g.setResizable( false );
+					
+					guardaMelodia( g.getTxtFieldContent() );				
+				}
 				
-				guardaMelodia( g.getTxtFieldContent() );
+				btnGuardar.setToolTipText("Registrate para guardar melodias.");
+				
 
 
 
@@ -844,8 +854,17 @@ public class MyFirstPiano extends JFrame {
 		btnMisMelodias = new JButton("Mis melodias");
 		btnMisMelodias.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent arg0) {
-//				ListaMelodiasUsuario list = new ListaMelodiasUsuario();
+			public void mousePressed( MouseEvent e ) {
+				
+				if ( btnMisMelodias.isEnabled() ) {
+					
+					MelodiasUsuario lista = new MelodiasUsuario();				
+					lista.setVisible( true );
+					lista.setUsuario( userConnected );					
+				}
+				//no hace nada
+				
+		
 				//aqui se me abre la ventana d elista usuarios.
 			}
 		});
@@ -876,7 +895,6 @@ public class MyFirstPiano extends JFrame {
 
 		tx.commit();			
 
-		btnGuardar.setEnabled( false );
 
 		lblGrabando.setText("Melodia guardada");
 		btnGuardar.setEnabled( false );

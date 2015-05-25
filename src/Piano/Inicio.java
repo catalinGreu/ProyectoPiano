@@ -285,7 +285,7 @@ public class Inicio extends JFrame {
 				r.setVisible(true);
 				r.setAlwaysOnTop(true);
 				
-//				setVisible(false);
+				setVisible(false);
 //				r.pack();
 				r.setPreferredSize( PREFERRED );
 				
@@ -307,7 +307,7 @@ public class Inicio extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				MyFirstPiano p = new MyFirstPiano();
-				//				p.pack();
+				//p.pack();
 				p.setVisible(true);
 				Usuario nuevo = new Usuario();
 				nuevo.setIDUser("");
