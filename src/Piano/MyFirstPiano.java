@@ -1,6 +1,7 @@
 package Piano;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -54,6 +55,7 @@ import javax.swing.JMenuItem;
 import java.awt.Toolkit;
 
 import javax.swing.JTextField;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -808,7 +810,8 @@ public class MyFirstPiano extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
-				GuardarMelodia g = new GuardarMelodia();
+				GuardarMelodia g = new GuardarMelodia(this);
+				g.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 				g.setAlwaysOnTop( true );
 				g.setVisible( true );
 				g.setResizable( false );

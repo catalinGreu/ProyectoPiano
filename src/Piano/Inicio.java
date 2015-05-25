@@ -63,7 +63,6 @@ public class Inicio extends JFrame {
 	private EntityManager em;
 	private Label labelWarning;
 
-	private static Inicio frameInicio;
 	/**
 	 * Launch the application.
 	 */
@@ -74,7 +73,7 @@ public class Inicio extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frameInicio = new Inicio();
+					Inicio frameInicio = new Inicio();
 					frameInicio.setVisible(true);
 					frameInicio.setEntityManager(em);
 					//					frame.pack();
@@ -282,11 +281,11 @@ public class Inicio extends JFrame {
 			@Override
 			public void mousePressed (MouseEvent arg0) {
 
-				Registration r = new Registration();
+				Registration r = new Registration(this);
 				r.setVisible(true);
 				r.setAlwaysOnTop(true);
 				
-				frameInicio.setVisible(false);
+//				setVisible(false);
 //				r.pack();
 				r.setPreferredSize( PREFERRED );
 				
@@ -359,7 +358,7 @@ public class Inicio extends JFrame {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				frameInicio.setVisible( false );
+				setVisible( false );
 			}
 			else {
 				labelWarning.setText("No existe el usuario");

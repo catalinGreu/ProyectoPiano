@@ -2,6 +2,7 @@ package Piano;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Window;
 
 import javax.persistence.EntityManager;
 import javax.swing.JButton;
@@ -38,7 +39,7 @@ public class GuardarMelodia extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			GuardarMelodia dialog = new GuardarMelodia();
+			GuardarMelodia dialog = new GuardarMelodia(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -49,7 +50,7 @@ public class GuardarMelodia extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public GuardarMelodia() {
+	public GuardarMelodia(MouseAdapter mouseAdapter) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GuardarMelodia.class.getResource("/Piano/save-icon.png")));
 		setBounds(100, 100, 346, 205);
 		getContentPane().setLayout(new BorderLayout());
@@ -64,6 +65,17 @@ public class GuardarMelodia extends JDialog {
 		contentPanel.add(lblNewLabel);
 
 		textField = new JTextField();
+		textField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ( e.getKeyCode() == KeyEvent.VK_ENTER) {
+					setVisible( false );
+					
+				}
+				
+				
+			}
+		});
 
 
 		textField.setForeground(new Color(0, 0, 0));
@@ -77,6 +89,13 @@ public class GuardarMelodia extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 			{
 				okButton = new JButton("Guardar");
+				okButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e) {
+						setVisible( false );
+						
+					}
+				});
 
 				okButton.setForeground(new Color(0, 0, 0));
 				okButton.setActionCommand("OK");
@@ -94,18 +113,7 @@ public class GuardarMelodia extends JDialog {
 
 	public String getTxtFieldContent(){	
 		
-		okButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {	
-				
-				nombreCancion = textField.getText();
-
-			}
-		});
-
-
-
-		return nombreCancion;
+		return textField.getText();
 
 	}
 

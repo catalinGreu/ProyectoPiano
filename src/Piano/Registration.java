@@ -27,6 +27,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Font;
+import java.awt.Window;
 
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
@@ -60,7 +61,6 @@ public class Registration extends JFrame {
 	private JTextField textFieldID;
 	private JLabel lblConfirmacion;
 
-	private static Registration frame;
 	private JButton btnAceptar;
 	/**
 	 * Launch the application.
@@ -69,7 +69,7 @@ public class Registration extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new Registration();
+					Registration frame = new Registration(null);
 
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -98,7 +98,7 @@ public class Registration extends JFrame {
 		dao = new UsuarioHibernate( em );
 	}
 
-	public Registration() {
+	public Registration( MouseAdapter mouseAdapter ) {
 
 		setResizable(false);
 		setBackground(new Color(153, 153, 153));
@@ -271,7 +271,7 @@ public class Registration extends JFrame {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				frame.setVisible( false );				
+				setVisible( false );				
 			}
 		});
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -337,7 +337,7 @@ public class Registration extends JFrame {
 		piano.setUserConected( u, true );
 		try {
 			piano.setEntityManager(this.em);
-			frame.setVisible( false );
+			setVisible( false );
 		} catch (Exception ex) {
 
 			ex.printStackTrace();
