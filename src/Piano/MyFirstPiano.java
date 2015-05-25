@@ -53,6 +53,10 @@ import javax.swing.JMenuItem;
 
 import java.awt.Toolkit;
 
+import javax.swing.JTextField;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+
 public class MyFirstPiano extends JFrame {
 
 	protected static final int MILISEGUNDOSDEMUESTREO = 10;
@@ -102,6 +106,7 @@ public class MyFirstPiano extends JFrame {
 	private JLabel lblUser;
 	private JLabel lblImgConect;
 	private JButton btnGuardar;
+	private JButton btnMisMelodias;
 
 	/**
 	 * Launch the application.
@@ -149,6 +154,8 @@ public class MyFirstPiano extends JFrame {
 			lblImgConect.setEnabled( false );
 			rec_btn.setEnabled( false );
 			rec_btn.setToolTipText("Registrate para poder grabar melodias");
+			btnMisMelodias.setEnabled( false );
+			btnMisMelodias.setToolTipText("No tiene melodias");
 		}
 
 	}
@@ -693,12 +700,12 @@ public class MyFirstPiano extends JFrame {
 		rec_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
+
 				if ( rec_btn.isEnabled() ) {
-					
+
 					lblGrabando.setText("Grabando...");
 				}
-				lblGrabar.setText("");				
+				lblGrabando.setText("");				
 
 			}
 		});
@@ -755,10 +762,9 @@ public class MyFirstPiano extends JFrame {
 						e.printStackTrace();
 					}
 				}
-
-				lblGrabando.setText("Pulsa para guardar");
-				btnGuardar.setEnabled( true );
-
+				if ( !btnGuardar.isEnabled() ) {
+					btnGuardar.setEnabled( true );
+				}		
 
 			}
 		});
@@ -795,60 +801,29 @@ public class MyFirstPiano extends JFrame {
 		lblImgConect.setBounds(10, 342, 31, 25);
 		contentPane.add(lblImgConect);
 
-		btnGuardar = new JButton("Guardar");
+		btnGuardar = new JButton("");
+		btnGuardar.setBackground(new Color(51, 153, 102));
+		btnGuardar.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/save_small.png")));
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
-////				GuardarMelodia g = new GuardarMelodia();
-////				g.setAlwaysOnTop(true);
-////				g.setVisible(true);
-////				g.setResizable( false );
-//				
-				String s = (String)JOptionPane.showInputDialog( frame, "Complete	the sentence:\n" + "\"Green eggs and...\"”, "Customized Dialog",
-				JOptionPane.PLAIN_MESSAGE, icon, possibilities, "ham");
-				//If a string was returned, say so.
-				if ((s != null) && (s.length() > 0)) {
-				etiqueta.setText("Green eggs and... " + s + "!");
-				return;
-				}
+				GuardarMelodia g = new GuardarMelodia();
+				g.setAlwaysOnTop( true );
+				g.setVisible( true );
+				g.setResizable( false );
 				
-				
-				String nombre = "";
-				
-				Usuario u = userConnected;
+				guardaMelodia( g.getTxtFieldContent() );
 
-//				nombre = g.getTxtFieldContent();
-				
-				Melodia m = new Melodia( nombre, u );
-				u.addMelodia( m );
 
-				for (Pulsacion p : listaParaGuardar) {
 
-					m.addPulsacion( p );
-				}
-
-				EntityTransaction tx = em.getTransaction();
-				tx.begin();
-				
-				em.persist( m );
-				for (Pulsacion p : listaParaGuardar) {
-					
-					em.persist( p );					
-				}
-				
-				tx.commit();			
-
-				btnGuardar.setEnabled( true );
-
-				//guardaMelodia donde haya que guardar
 			}
 		});
 		btnGuardar.setEnabled(false);
 		btnGuardar.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnGuardar.setBounds(1068, 143, 89, 23);
+		btnGuardar.setBounds(1109, 133, 29, 32);
 		contentPane.add(btnGuardar);
-		
+
 		JButton btnExit = new JButton("");
 		btnExit.addMouseListener(new MouseAdapter() {
 			@Override
@@ -858,10 +833,52 @@ public class MyFirstPiano extends JFrame {
 		});
 		btnExit.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/exit.png")));
 		btnExit.setForeground(new Color(0, 0, 0));
-		btnExit.setBackground(new Color(51, 153, 153));
+		btnExit.setBackground(new Color(51, 153, 102));
 		btnExit.setBounds(1101, 346, 37, 32);
 		contentPane.add(btnExit);
 		btnExit.setToolTipText("Salir");
+		
+		btnMisMelodias = new JButton("Mis melodias");
+		btnMisMelodias.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+//				ListaMelodiasUsuario list = new ListaMelodiasUsuario();
+				//aqui se me abre la ventana d elista usuarios.
+			}
+		});
+		btnMisMelodias.setFont(new Font("SansSerif", Font.BOLD, 11));
+		btnMisMelodias.setBounds(1064, 41, 107, 25);
+		contentPane.add(btnMisMelodias);
+	}
+
+	public void guardaMelodia( String nombre ){
+
+		Usuario u = userConnected;
+		Melodia m = new Melodia( nombre, u );
+		u.addMelodia( m );
+
+		for (Pulsacion p : listaParaGuardar) {
+
+			m.addPulsacion( p );
+		}
+
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+
+		em.persist( m );
+		for (Pulsacion p : listaParaGuardar) {
+
+			em.persist( p );					
+		}
+
+		tx.commit();			
+
+		btnGuardar.setEnabled( false );
+
+		lblGrabando.setText("Melodia guardada");
+		btnGuardar.setEnabled( false );
+		//guardaMelodia donde haya que guardar	
+
 	}
 
 	public static void tick(){		

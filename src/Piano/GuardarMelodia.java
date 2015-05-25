@@ -18,6 +18,10 @@ import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GuardarMelodia extends JDialog {
 
@@ -26,6 +30,9 @@ public class GuardarMelodia extends JDialog {
 	private MelodiaHibernate mh;
 	private EntityManager em;
 	private Usuario u;
+	private String nombreCancion;
+	private JButton okButton;
+	private JButton cancelButton;
 	/**
 	 * Launch the application.
 	 */
@@ -57,6 +64,8 @@ public class GuardarMelodia extends JDialog {
 		contentPanel.add(lblNewLabel);
 
 		textField = new JTextField();
+
+
 		textField.setForeground(new Color(0, 0, 0));
 		textField.setFont(new Font("SansSerif", Font.BOLD, 11));
 		textField.setBounds(176, 44, 126, 27);
@@ -67,32 +76,37 @@ public class GuardarMelodia extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
 			{
-				JButton okButton = new JButton("Guardar");
-				okButton.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mousePressed(MouseEvent e) {						
-//						getTxtFieldContent();
-						setVisible(false);
+				okButton = new JButton("Guardar");
 
-					}
-				});
 				okButton.setForeground(new Color(0, 0, 0));
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancelar");
+				cancelButton = new JButton("Cancelar");
 				cancelButton.setForeground(new Color(0, 0, 0));
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 	}
-	
-	public String getTxtFieldContent(){		
+
+	public String getTxtFieldContent(){	
 		
-		return textField.getText();
+		okButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {	
+				
+				nombreCancion = textField.getText();
+
+			}
+		});
+
+
+
+		return nombreCancion;
+
 	}
-	
+
 }
