@@ -36,24 +36,22 @@ public class MelodiasUsuario extends JFrame {
 	private JLabel lblNombreuser;
 	private JList list;
 
-	private class MelodiaRenderer extends DefaultListCellRenderer {
-
-		@Override
-		public Component getListCellRendererComponent( JList<?> list, Object value, int index, 
-				boolean isSelected, boolean cellHasFocus){
-			Component ret = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-			
-			JLabel label = (JLabel) ret;
-			Melodia m = (Melodia) value;
-			label.setText("ID: " + m.getId_melodia() + " " + m.getNombreMelodia() );
-			
-			return ret;
-			
-		}
-
-	}	
-
-
+//	private class MelodiaRenderer extends DefaultListCellRenderer {
+//
+//		@Override
+//		public Component getListCellRendererComponent( JList<?> list, Object value, int index, 
+//				boolean isSelected, boolean cellHasFocus){
+//			Component ret = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+//			
+//			JLabel label = (JLabel) ret;
+//			Melodia m = (Melodia) value;
+//			label.setText("ID: " + m.getId_melodia() + " " + m.getNombreMelodia() );
+//			
+//			return ret;
+//			
+//		}
+//
+//	}	
 
 
 	public static void main(String[] args) {
@@ -95,10 +93,7 @@ public class MelodiasUsuario extends JFrame {
 		list = new JList<Melodia>();
 		panel.add( new ScrollPane());
 		
-		for ( int i = 0; i < listaMelodias.size(); i+=1 ) {
-
-
-		}
+		
 
 		JButton btnPlay = new JButton("Play");
 		btnPlay.setBounds(503, 58, 89, 23);
@@ -131,10 +126,8 @@ public class MelodiasUsuario extends JFrame {
 
 		for (Melodia m : listaMelodias) {
 
-			model.addElement(m);
-		
+			model.addElement(m);		
 		}
-
 	}
 
 
