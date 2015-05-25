@@ -331,9 +331,7 @@ public class Registration extends JFrame {
 		MyFirstPiano piano = new MyFirstPiano();
 		piano.setVisible( true );
 		piano.setResizable(false);
-		
-		piano.setAlwaysOnTop( true );
-		
+				
 		piano.setUserConected( u, true );
 		try {
 			piano.setEntityManager(this.em);

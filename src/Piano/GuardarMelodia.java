@@ -69,11 +69,10 @@ public class GuardarMelodia extends JDialog {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if ( e.getKeyCode() == KeyEvent.VK_ENTER) {
+					
 					setVisible( false );
 					
-				}
-				
-				
+				}				
 			}
 		});
 

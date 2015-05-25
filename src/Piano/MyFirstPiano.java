@@ -93,9 +93,6 @@ public class MyFirstPiano extends JFrame {
 	private JLabel lblParar;
 	private JLabel lblNewLabel;
 	private JPanel panelReproductor;
-	private JMenu mnOpciones;
-	private JMenuItem mntmListaMelodias;
-	private JMenuItem mntmEditarPerfil;
 	private JLabel lblGrabando;
 
 	private EntityManager em;
@@ -681,7 +678,7 @@ public class MyFirstPiano extends JFrame {
 
 		lblIduser = new JLabel("");
 		lblIduser.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblIduser.setBounds(95, 342, 99, 25);
+		lblIduser.setBounds(95, 342, 304, 25);
 		contentPane.add(lblIduser);
 
 		lblParar = new JLabel("Stop");
@@ -707,12 +704,12 @@ public class MyFirstPiano extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
-				if ( rec_btn.isEnabled() ) {
-
-					lblGrabando.setText("Grabando...");
-				}
-				lblGrabando.setText("");				
-
+				if ( !rec_btn.isEnabled() ) {
+					
+					lblGrabando.setText("");
+					
+				}								
+				lblGrabando.setText("Grabando...");
 			}
 		});
 		rec_btn.setBounds(26, 11, 25, 23);
@@ -742,6 +739,7 @@ public class MyFirstPiano extends JFrame {
 		play_btn.setBounds(148, 11, 25, 23);
 		panelReproductor.add(play_btn);
 		play_btn.addMouseListener(new MouseAdapter() {
+			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
@@ -778,19 +776,6 @@ public class MyFirstPiano extends JFrame {
 		play_btn.setForeground(Color.BLACK);
 		play_btn.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/play.png")));
 
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 114, 32);
-		contentPane.add(panel);
-
-		mnOpciones = new JMenu("Opciones");
-		panel.add(mnOpciones);
-
-		mntmListaMelodias = new JMenuItem("Lista Melodias");
-		mnOpciones.add(mntmListaMelodias);
-
-		mntmEditarPerfil = new JMenuItem("Editar Perfil");
-		mnOpciones.add(mntmEditarPerfil);
-
 		lblGrabando = new JLabel("");
 		lblGrabando.setFont(new Font("SansSerif", Font.BOLD, 13));
 		lblGrabando.setBounds(958, 168, 197, 25);
@@ -817,7 +802,7 @@ public class MyFirstPiano extends JFrame {
 				if ( btnGuardar.isEnabled() ) {
 					
 					GuardarMelodia g = new GuardarMelodia(this);
-					g.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
+					g.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 					g.setAlwaysOnTop( true );
 					g.setVisible( true );
 					g.setResizable( false );
@@ -860,16 +845,21 @@ public class MyFirstPiano extends JFrame {
 					
 					MelodiasUsuario lista = new MelodiasUsuario();				
 					lista.setVisible( true );
-					lista.setUsuario( userConnected );					
+					lista.setResizable( false );
+					lista.setUsuario( userConnected );	
+					try {
+						lista.setEntityManager(em);
+					} catch (Exception e1) {
+						
+						e1.printStackTrace();
+					}
+								
 				}
-				//no hace nada
-				
 		
-				//aqui se me abre la ventana d elista usuarios.
 			}
 		});
 		btnMisMelodias.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnMisMelodias.setBounds(1064, 41, 107, 25);
+		btnMisMelodias.setBounds(1031, 33, 124, 25);
 		contentPane.add(btnMisMelodias);
 	}
 

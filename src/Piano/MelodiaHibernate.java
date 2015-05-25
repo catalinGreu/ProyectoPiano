@@ -30,12 +30,20 @@ public class MelodiaHibernate {
 	}
 	
 	//igual ya ni me hacen falta estas clases
-	private Melodia findByPrimaryKey( Melodia m ) {
+	public Melodia findByPrimaryKey( Melodia m ) {
 		TypedQuery<Melodia> q = em.createQuery("from Melodia where id_melodia=:id", Melodia.class);
 		q.setParameter("id", m.getId_melodia() );
 		List<Melodia> resultList = q.getResultList();
 		return resultList.get(0);
 
+	}
+	
+	public List<Melodia> buscaMelodiasPorUsuario (Usuario u){
+		
+		TypedQuery<Melodia> q = em.createQuery("from Melodia where id_user=:id", Melodia.class );
+		q.setParameter("id", u.getIDUser() );
+		List<Melodia> resultList = q.getResultList();
+		return resultList;
 	}
 	
 //	public List findAll( Melodia m ){

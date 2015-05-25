@@ -339,12 +339,11 @@ public class Inicio extends JFrame {
 			Usuario userFound = null;
 			try {
 				userFound = dao.findByPrimaryKey( u );
-			} catch (Exception e1) {
+			} catch (NullPointerException npe) {
 
 				System.out.println("Usuario no existe, o esta malpuesto");
 				labelWarning.setText("Usuario no existe");
 
-				//e1.printStackTrace();
 			}
 
 			if ( userFound.equals( u ) ) {

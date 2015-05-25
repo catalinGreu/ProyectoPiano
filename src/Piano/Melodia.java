@@ -39,8 +39,7 @@ public class Melodia {
 		}
 		return listaPulsaciones;
 
-	}			
-	
+	}	
 	
 	public Melodia (){}
 	
@@ -69,7 +68,7 @@ public class Melodia {
 		return id_melodia;
 	}
 	
-	public void setId_melodia(int id_melodia) {
+	public void setId_melodia( int id_melodia ) {
 		this.id_melodia = id_melodia;
 	}
 	
@@ -89,6 +88,12 @@ public class Melodia {
 
 	public void setNombreMelodia(String nombre) {
 		this.nombre_Melodia = nombre;
+	}
+	
+	@Override
+	public String toString() {
+		
+		return String.format("Id: %s - Nombre Melodia: \"%s\" ", this.id_melodia, this.nombre_Melodia );
 	}
 
 }
