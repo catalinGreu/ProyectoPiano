@@ -102,6 +102,7 @@ public class Usuario {
 	//equals si ID y Password son iguales
 	@Override
 	public boolean equals( Object obj ) {
+		
 		Usuario u = (Usuario) obj;
 		
 		if ( u.getIDUser().equals( this.getIDUser() ) ) {
