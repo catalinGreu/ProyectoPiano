@@ -21,6 +21,7 @@ import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
@@ -157,11 +158,11 @@ public class MyFirstPiano extends JFrame {
 	public MyFirstPiano() {
 		setImageIcon();
 		setResizable(false);
-		setBackground(new Color(51, 153, 153));
+		setBackground(new Color(51, 153, 102));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1197, 458);
 		contentPane = new JLayeredPane();
-		contentPane.setBackground(new Color(0, 153, 153));
+		contentPane.setBackground(new Color(0, 153, 102));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -692,7 +693,12 @@ public class MyFirstPiano extends JFrame {
 		rec_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				lblGrabando.setText("Grabando...");
+				
+				if ( rec_btn.isEnabled() ) {
+					
+					lblGrabando.setText("Grabando...");
+				}
+				lblGrabar.setText("");				
 
 			}
 		});
@@ -794,14 +800,27 @@ public class MyFirstPiano extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				
-				GuardarMelodia g = new GuardarMelodia();
-				g.setAlwaysOnTop(true);
-				g.setVisible(true);
+////				GuardarMelodia g = new GuardarMelodia();
+////				g.setAlwaysOnTop(true);
+////				g.setVisible(true);
+////				g.setResizable( false );
+//				
+				String s = (String)JOptionPane.showInputDialog( frame, "Complete	the sentence:\n" + "\"Green eggs and...\"”, "Customized Dialog",
+				JOptionPane.PLAIN_MESSAGE, icon, possibilities, "ham");
+				//If a string was returned, say so.
+				if ((s != null) && (s.length() > 0)) {
+				etiqueta.setText("Green eggs and... " + s + "!");
+				return;
+				}
+				
+				
+				String nombre = "";
 				
 				Usuario u = userConnected;
+
+//				nombre = g.getTxtFieldContent();
 				
-				//hacer que se espere a que escriba algo en la ventana de dialogo.
-				Melodia m = new Melodia( g.getTxtFieldContent(), u );
+				Melodia m = new Melodia( nombre, u );
 				u.addMelodia( m );
 
 				for (Pulsacion p : listaParaGuardar) {
@@ -820,7 +839,7 @@ public class MyFirstPiano extends JFrame {
 				
 				tx.commit();			
 
-				
+				btnGuardar.setEnabled( true );
 
 				//guardaMelodia donde haya que guardar
 			}

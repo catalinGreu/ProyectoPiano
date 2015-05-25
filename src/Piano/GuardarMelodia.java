@@ -3,13 +3,17 @@ package Piano;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
+import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JTextField;
+
 import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -19,6 +23,9 @@ public class GuardarMelodia extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textField;
+	private MelodiaHibernate mh;
+	private EntityManager em;
+	private Usuario u;
 	/**
 	 * Launch the application.
 	 */
@@ -63,7 +70,8 @@ public class GuardarMelodia extends JDialog {
 				JButton okButton = new JButton("Guardar");
 				okButton.addMouseListener(new MouseAdapter() {
 					@Override
-					public void mousePressed(MouseEvent e) {
+					public void mousePressed(MouseEvent e) {						
+//						getTxtFieldContent();
 						setVisible(false);
 
 					}
@@ -81,8 +89,10 @@ public class GuardarMelodia extends JDialog {
 			}
 		}
 	}
-	public String getTxtFieldContent(){
+	
+	public String getTxtFieldContent(){		
 		
 		return textField.getText();
 	}
+	
 }
