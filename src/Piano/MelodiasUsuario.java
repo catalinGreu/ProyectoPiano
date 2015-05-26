@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -26,9 +27,11 @@ import javax.swing.JScrollBar;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 import javax.swing.border.MatteBorder;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -130,9 +133,7 @@ public class MelodiasUsuario extends JFrame {
 				System.out.println(m.getId_melodia());
 				System.out.println(m.getNombreMelodia());
 				
-				pulsacionesReproducir = m.getPulsaciones();
 				Reproductor r = new Reproductor();
-//				r.setListaPulsaciones(pulsacionesReproducir);
 				r.setListaPulsaciones(pdao.getPulsacionesDeMelodia( m ));
 				r.tocaMelodia();
 			}
@@ -147,9 +148,19 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Melodia m = listPanel.getSelectedValue();
-				int i = listPanel.getComponentCount()-1;
-				listPanel.remove(i);
+				
+				if ( m == null) {
+					return;
+				}
+				
+				
+				EntityTransaction tx = em.getTransaction();
+				tx.begin();
 				dao.delete(m);
+				tx.commit();
+				DefaultListModel<Melodia> model = (DefaultListModel<Melodia>) listPanel.getModel();
+				model.removeElement( m );
+				//refresco la lista
 			}
 		});
 		btnBorrar.setForeground(new Color(0, 0, 0));
@@ -187,7 +198,6 @@ public class MelodiasUsuario extends JFrame {
 	public void rellenaListaMelodias(){
 		
 		listaRetorno = dao.buscaMelodiasPorUsuario( userConectado );
-//		List<Melodia> listaMelodias = new ArrayList<Melodia>();		
 
 		DefaultListModel<Melodia> model = new DefaultListModel<Melodia>();
 		listPanel.setModel(model);
@@ -197,7 +207,7 @@ public class MelodiasUsuario extends JFrame {
 		}
 		listPanel.setModel( model );
 		
-		if ( listaRetorno.size() < 15 ) {
+		if ( listaRetorno.size() > 15 ) {
 			scrollBar.setEnabled( true );
 		}
 	}
@@ -209,6 +219,5 @@ public class MelodiasUsuario extends JFrame {
 
 	}
 	
-//	public void borraSelected
 
 }
