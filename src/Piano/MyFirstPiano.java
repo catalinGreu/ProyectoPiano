@@ -63,8 +63,8 @@ import java.awt.event.FocusEvent;
 public class MyFirstPiano extends JFrame {
 
 	protected static final int MILISEGUNDOSDEMUESTREO = 10;
-	private static ArrayList<Pulsacion> listaTeclas = new ArrayList<Pulsacion>();
-	private static ArrayList<Pulsacion> listaParaGuardar = new ArrayList<Pulsacion>();
+	private ArrayList<Pulsacion> listaTeclas = new ArrayList<Pulsacion>();
+	private ArrayList<Pulsacion> listaParaGuardar = new ArrayList<Pulsacion>();
 
 	private Timer timer;
 	private static double contador = 0;
@@ -710,6 +710,7 @@ public class MyFirstPiano extends JFrame {
 					
 				}								
 				lblGrabando.setText("Grabando...");
+				listaTeclas.removeAll(listaTeclas);
 			}
 		});
 		rec_btn.setBounds(26, 11, 25, 23);
@@ -744,8 +745,13 @@ public class MyFirstPiano extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 
 				lblGrabando.setText("Reproduciendo....");
+				
+//				if ( !listaParaGuardar.isEmpty() ) {
+//					listaParaGuardar.removeAll(listaParaGuardar);
+//				}
 				listaParaGuardar = (ArrayList)listaTeclas.clone();
 				
+								
 				Reproductor r = new Reproductor();
 				r.setListaPulsaciones(listaParaGuardar);
 				r.tocaMelodia();
@@ -855,7 +861,9 @@ public class MyFirstPiano extends JFrame {
 		Melodia m = new Melodia( nombre, u );
 		u.addMelodia( m );
 
-		for (Pulsacion p : listaParaGuardar) {
+		System.out.println("Size de la listaParaGuardar cuando llega:" + listaParaGuardar.size());
+		System.out.println("Size de la listaTeclas cuando llega:" + listaTeclas.size());
+		for (Pulsacion p : listaTeclas) {
 
 			m.addPulsacion( p );
 		}
@@ -864,13 +872,14 @@ public class MyFirstPiano extends JFrame {
 		tx.begin();
 
 		em.persist( m );
-		for (Pulsacion p : listaParaGuardar) {
+		for (Pulsacion p : listaTeclas) {
 
 			em.persist( p );					
 		}
 
-		tx.commit();			
-
+		tx.commit();	
+		
+		listaTeclas.removeAll(listaTeclas);
 
 		lblGrabando.setText("Melodia guardada");
 		btnGuardar.setEnabled( false );

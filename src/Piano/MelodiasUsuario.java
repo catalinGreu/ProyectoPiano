@@ -37,6 +37,7 @@ public class MelodiasUsuario extends JFrame {
 	private JPanel contentPane;
 	private EntityManager em;
 	private MelodiaHibernate dao;
+	private PulsacionHibernate pdao;
 	private Usuario userConectado;
 	private JLabel lblConnected;
 	private JLabel lblNombreUser;
@@ -125,9 +126,14 @@ public class MelodiasUsuario extends JFrame {
 			public void mousePressed( MouseEvent e ) {
 			
 				Melodia m = listPanel.getSelectedValue();
+				
+				System.out.println(m.getId_melodia());
+				System.out.println(m.getNombreMelodia());
+				
 				pulsacionesReproducir = m.getPulsaciones();
 				Reproductor r = new Reproductor();
-				r.setListaPulsaciones(pulsacionesReproducir);
+//				r.setListaPulsaciones(pulsacionesReproducir);
+				r.setListaPulsaciones(pdao.getPulsacionesDeMelodia( m ));
 				r.tocaMelodia();
 			}
 		});
@@ -137,6 +143,15 @@ public class MelodiasUsuario extends JFrame {
 		contentPane.add(btnReproducir);
 		
 		btnBorrar = new JButton("Borrar");
+		btnBorrar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Melodia m = listPanel.getSelectedValue();
+				int i = listPanel.getComponentCount()-1;
+				listPanel.remove(i);
+				dao.delete(m);
+			}
+		});
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnBorrar.setBounds(552, 178, 100, 30);
@@ -165,6 +180,7 @@ public class MelodiasUsuario extends JFrame {
 	public void setEntityManager( EntityManager em ) throws Exception {
 		this.em = em;
 		dao = new MelodiaHibernate ( em );
+		pdao = new PulsacionHibernate( em );
 		rellenaListaMelodias();
 	}
 	

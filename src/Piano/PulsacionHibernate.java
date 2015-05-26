@@ -29,7 +29,7 @@ public class PulsacionHibernate {
 		em.remove( p );
 	}
 	
-	private Pulsacion findByPrimaryKey( Pulsacion p ) {
+	public Pulsacion findByPrimaryKey( Pulsacion p ) {
 		TypedQuery<Pulsacion> q = em.createQuery("from Pulsacion where id_pulsacion=:id", Pulsacion.class);
 		q.setParameter("id", p.getIdPulsacion() );
 		List<Pulsacion> resultList = q.getResultList();
@@ -37,7 +37,7 @@ public class PulsacionHibernate {
 
 	}
 	
-	private List<Pulsacion> getPulsacionesDeMelodia ( Melodia m ){
+	public List<Pulsacion> getPulsacionesDeMelodia ( Melodia m ){
 		TypedQuery<Pulsacion> q = em.createQuery("from Pulsacion where id_melodia=:id", Pulsacion.class );
 		q.setParameter("id", m.getId_melodia() );
 		List<Pulsacion> resultList = q.getResultList();

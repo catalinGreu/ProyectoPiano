@@ -12,6 +12,7 @@ public class Reproductor {
 	private List<Pulsacion> listaQueDeboTocar;
 	protected static final int MILISEGUNDOSDEMUESTREO = 10;
 	private Clip clip;
+	
 	public Reproductor(){}
 	
 	public void tocaMelodia() {
@@ -29,7 +30,6 @@ public class Reproductor {
 				System.out.println();
 			}
 			tickPorElQueVoy += 1;
-			
 			try {
 				Thread.sleep( MILISEGUNDOSDEMUESTREO );
 			} catch (InterruptedException e) {
