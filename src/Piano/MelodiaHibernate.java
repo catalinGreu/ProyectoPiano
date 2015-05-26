@@ -38,6 +38,16 @@ public class MelodiaHibernate {
 
 	}
 	
+	public List<Pulsacion> pulsacionesDeMelodia ( Melodia m ){
+		TypedQuery<Pulsacion> q = em.createQuery("from Pulsacion where id_melodia=:id" , Pulsacion.class );
+		q.setParameter("id", m.getId_melodia() );
+		List<Pulsacion> resultList = q.getResultList();		
+		return resultList;
+		
+		
+		
+	}
+	
 	public List<Melodia> buscaMelodiasPorUsuario (Usuario u){
 		
 		TypedQuery<Melodia> q = em.createQuery("from Melodia where id_user=:id", Melodia.class );

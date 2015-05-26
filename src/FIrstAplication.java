@@ -97,7 +97,7 @@ public class FIrstAplication {
 		passwordField.setBounds(178, 152, 146, 25);
 		frmMiAplicacion.getContentPane().add(passwordField);
 
-		JLabel label = new JLabel("");
+		final JLabel label = new JLabel("");
 		label.setBounds(79, 24, 288, 25);
 		frmMiAplicacion.getContentPane().add(label);
 		Color c = new Color(255, 0, 0);

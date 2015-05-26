@@ -39,6 +39,13 @@ public class UsuarioHibernate {
 		TypedQuery<Usuario> q = em.createQuery("from Usuario where id_user=:id", Usuario.class);
 		q.setParameter("id", u.getIDUser() );
 		List<Usuario> resultList = q.getResultList();
+		
+		if ( resultList.isEmpty() ) {
+			
+			System.out.println("El usuario no existe");
+			return null;
+		}
+		
 		return resultList.get(0);
 	}
 	

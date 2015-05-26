@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 public class Usuario {
 
@@ -27,6 +30,7 @@ public class Usuario {
 	String password;
 
 	@OneToMany(mappedBy="usuario")
+	@OnDelete(action=OnDeleteAction.CASCADE)
 	private List<Melodia> listaMelodias;
 
 	public List<Melodia> getMelodias (){

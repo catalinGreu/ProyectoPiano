@@ -69,7 +69,7 @@ public class Inicio extends JFrame {
 	public static void main(String[] args) {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
-		EntityManager em = emf.createEntityManager();
+		final EntityManager em = emf.createEntityManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -105,7 +105,7 @@ public class Inicio extends JFrame {
 	}
 
 	public Inicio() {
-		setBackground();
+		//		setBackground();
 		setForeground(Color.WHITE);
 		setResizable(false);
 		setImageIcon();
@@ -229,11 +229,11 @@ public class Inicio extends JFrame {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				System.exit( 0 );
 			}
 		});
-		
+
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnCancelar.setForeground(new Color(0, 0, 0));
 		panelBotones.add(btnCancelar);
@@ -284,11 +284,11 @@ public class Inicio extends JFrame {
 				Registration r = new Registration(this);
 				r.setVisible(true);
 				r.setAlwaysOnTop(true);
-				
+
 				setVisible(false);
-//				r.pack();
+				//				r.pack();
 				r.setPreferredSize( PREFERRED );
-				
+
 				try {
 					r.setEntityManager( em );
 				} catch (Exception e) {
@@ -337,17 +337,16 @@ public class Inicio extends JFrame {
 
 			dao = new UsuarioHibernate( em );
 			Usuario userFound = null;
-			try {
-				userFound = dao.findByPrimaryKey( u );
-			} catch (NullPointerException npe) {
 
+			userFound = dao.findByPrimaryKey( u );	
+
+			if ( userFound == null ) {
+
+				labelWarning.setText("Usuario inexistente");
 				System.out.println("Usuario no existe, o esta malpuesto");
-				labelWarning.setText("Usuario no existe");
-
 			}
 
-			if ( userFound.equals( u ) ) {
-
+			else if ( userFound.equals( u )) {
 				MyFirstPiano p = new MyFirstPiano();
 				p.setVisible(true);
 				p.setResizable(false);
@@ -364,37 +363,30 @@ public class Inicio extends JFrame {
 
 			}
 		}
-	}
 
-	public void setBackground(){
-		URL bgImage=this.getClass().getResource("fondoinicio.jpg");
-		BufferedImage bg=null;
-		try {
-			bg = ImageIO.read(bgImage);
-		} catch (IOException e) {
-			System.out.println("Background image does not exist!");
-		}
-		//		setContentPane(	new ImagePanel(bg));
 	}
-
-	//	private boolean userExists( Usuario u ) {
-	//		
-	//		Query q = getSession.cre
-	//		return false;
-	//	}
 
 }
+
+//	public void setBackground(){
+//		URL bgImage=this.getClass().getResource("fondoinicio.jpg");
+//		BufferedImage bg=null;
+//		try {
+//			bg = ImageIO.read(bgImage);
+//		} catch (IOException e) {
+//			System.out.println("Background image does not exist!");
+//		}
+//				setContentPane(	new ImagePanel(bg));
+//	}
+
+//	private boolean userExists( Usuario u ) {
+//		
+//		Query q = getSession.cre
+//		return false;
+//	}
+
+
 //
-//class ImagePanel extends JComponent {
-//	private Image image;
-//	public ImagePanel(Image image) {
-//		this.image = image;
-//	}
-//	@Override
-//	protected void paintComponent(Graphics g) {
-//		super.paintComponent(g);
-//		g.drawImage(image, 0, 0, this);
-//	}
-//}
+
 
 

@@ -148,19 +148,26 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Melodia m = listPanel.getSelectedValue();
-				
+				List<Pulsacion> pulsacionesDeMelodiaQBorro;
+				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
 				if ( m == null) {
 					return;
-				}
-				
+				}				
 				
 				EntityTransaction tx = em.getTransaction();
 				tx.begin();
+				
+				for (Pulsacion p : pulsacionesDeMelodiaQBorro) {
+					
+					pdao.delete(p);					
+				}
+				
 				dao.delete(m);
 				tx.commit();
 				DefaultListModel<Melodia> model = (DefaultListModel<Melodia>) listPanel.getModel();
 				model.removeElement( m );
 				//refresco la lista
+				//kaska, no borro melodia de tabla pulsaciones
 			}
 		});
 		btnBorrar.setForeground(new Color(0, 0, 0));

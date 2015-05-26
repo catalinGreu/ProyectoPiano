@@ -15,12 +15,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.swing.Timer;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 
 public class Pulsacion {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)	
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@OnDelete(action =  OnDeleteAction.CASCADE)
 	private int id_pulsacion;	
 
 	@ManyToOne
