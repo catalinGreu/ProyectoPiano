@@ -745,32 +745,18 @@ public class MyFirstPiano extends JFrame {
 
 				lblGrabando.setText("Reproduciendo....");
 				listaParaGuardar = (ArrayList)listaTeclas.clone();
-				int tickPorElQueVoy = 0;
-				while( listaTeclas.size() > 0 ){
-					Pulsacion p = listaTeclas.get( 0 );
-					System.out.println( p );
-					if( p.getTick() <= tickPorElQueVoy ){
-						playSound( p.getNombreNota() );
-						//				System.out.println("Toco:" + p );
-						listaTeclas.remove( 0 );
-					}
-					else{
-						System.out.println("En este tick no toco");
-						System.out.println();
-					}
-					tickPorElQueVoy += 1;
-					//			System.out.println("Reproduciendo:" + tickPorElQueVoy);
-					try {
-						Thread.sleep( MILISEGUNDOSDEMUESTREO );
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
+				
+				Reproductor r = new Reproductor();
+				r.setListaPulsaciones(listaParaGuardar);
+				r.tocaMelodia();
+				
 				if ( !btnGuardar.isEnabled() ) {
 					btnGuardar.setEnabled( true );
 				}		
 
 			}
+
+			
 		});
 
 		play_btn.setForeground(Color.BLACK);

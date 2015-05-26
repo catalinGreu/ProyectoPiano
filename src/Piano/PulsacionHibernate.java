@@ -38,7 +38,7 @@ public class PulsacionHibernate {
 	}
 	
 	private List<Pulsacion> getPulsacionesDeMelodia ( Melodia m ){
-		TypedQuery<Pulsacion> q = em.createQuery("select nota from Pulsacion where id_melodia=:id", Pulsacion.class );
+		TypedQuery<Pulsacion> q = em.createQuery("from Pulsacion where id_melodia=:id", Pulsacion.class );
 		q.setParameter("id", m.getId_melodia() );
 		List<Pulsacion> resultList = q.getResultList();
 		

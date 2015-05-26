@@ -26,6 +26,11 @@ import javax.swing.JScrollBar;
 import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.border.TitledBorder;
+import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MelodiasUsuario extends JFrame {
 
@@ -41,6 +46,7 @@ public class MelodiasUsuario extends JFrame {
 	private JList<Melodia> listPanel;
 	private List<Melodia> listaRetorno;
 	private JScrollBar scrollBar;
+	private List<Pulsacion> pulsacionesReproducir;
 	
 	private class ListaMelodiasRenderer extends DefaultListCellRenderer {
 
@@ -95,23 +101,36 @@ public class MelodiasUsuario extends JFrame {
 		contentPane.setLayout(null);
 		
 		JPanel panelCentro = new JPanel();
-		panelCentro.setBackground(new Color(0, 0, 51));
-		panelCentro.setBounds(62, 95, 470, 259);
+		panelCentro.setBackground(new Color(255, 255, 255));
+		panelCentro.setBounds(62, 100, 470, 264);
 		contentPane.add(panelCentro);
 		panelCentro.setLayout(null);
 		
 		
 		scrollBar = new JScrollBar();
-		scrollBar.setBounds(443, 11, 17, 237);
+		scrollBar.setEnabled(false);
+		scrollBar.setBounds(453, 0, 17, 264);
 		panelCentro.add(scrollBar);
 		
 		listPanel = new JList();
+		listPanel.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		listPanel.setFont(new Font("SansSerif", Font.BOLD, 13));
-		listPanel.setBounds(10, 11, 450, 237);
+		listPanel.setBounds(10, 11, 433, 242);
 		panelCentro.add(listPanel);
 		listPanel.setCellRenderer(new ListaMelodiasRenderer() );
 		
 		btnReproducir = new JButton("Reproducir");
+		btnReproducir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed( MouseEvent e ) {
+			
+				Melodia m = listPanel.getSelectedValue();
+				pulsacionesReproducir = m.getPulsaciones();
+				Reproductor r = new Reproductor();
+				r.setListaPulsaciones(pulsacionesReproducir);
+				r.tocaMelodia();
+			}
+		});
 		btnReproducir.setForeground(new Color(0, 0, 0));
 		btnReproducir.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnReproducir.setBounds(552, 100, 100, 30);
@@ -173,5 +192,7 @@ public class MelodiasUsuario extends JFrame {
 		lblNombreUser.setText(userConectado.getIDUser() );
 
 	}
+	
+//	public void borraSelected
 
 }
