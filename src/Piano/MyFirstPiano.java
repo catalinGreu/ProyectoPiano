@@ -102,12 +102,14 @@ public class MyFirstPiano extends JFrame {
 	private String idUsuarioConectado;
 
 	private Usuario userConnected;
-	
+
 	private JLabel lblIduser;
 	private JLabel lblUser;
 	private JLabel lblImgConect;
 	private JButton btnGuardar;
 	private JButton btnMisMelodias;
+	private JButton play_btn;
+	private JButton stop_btn;
 
 	/**
 	 * Launch the application.
@@ -152,10 +154,14 @@ public class MyFirstPiano extends JFrame {
 			rec_btn.setToolTipText("Pulsa para grabar");
 		}
 		else {
+			this.userConnected = null;
 			lblImgConect.setEnabled( false );
 			rec_btn.setEnabled( false );
-			btnGuardar.setEnabled(false);
-			
+			btnGuardar.setEnabled( false );
+			play_btn.setEnabled( false );
+			stop_btn.setEnabled( false );
+
+
 			rec_btn.setToolTipText("Registrate para poder grabar melodias");
 			btnMisMelodias.setEnabled( false );
 			btnMisMelodias.setToolTipText("No tiene melodias");
@@ -705,12 +711,14 @@ public class MyFirstPiano extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 
 				if ( !rec_btn.isEnabled() ) {
-					
+
 					lblGrabando.setText("");
-					
-				}								
-				lblGrabando.setText("Grabando...");
-				listaTeclas.removeAll(listaTeclas);
+
+				}			
+				else{
+					lblGrabando.setText("Grabando...");
+					listaTeclas.removeAll(listaTeclas);
+				}
 			}
 		});
 		rec_btn.setBounds(26, 11, 25, 23);
@@ -722,21 +730,30 @@ public class MyFirstPiano extends JFrame {
 
 		rec_btn.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/rec.png")));
 
-		JButton stop_btn = new JButton("");
+		stop_btn = new JButton("");
 		stop_btn.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/stop2.png")));
 		stop_btn.setBounds(93, 11, 25, 23);
 		panelReproductor.add(stop_btn);
 		stop_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				lblGrabando.setText("Stop.");
-				timer.stop();
-				contador = 0;
+
+				if ( !stop_btn.isEnabled() ) {
+
+					lblGrabando.setText("");
+				}
+				else {			
+					lblGrabando.setText("Stop.");
+					stop_btn.setToolTipText("Pulsa para parar");
+					timer.stop();
+					contador = 0;					
+				}
+				
 			}
 		});
 		stop_btn.setActionCommand("stop");
 
-		JButton play_btn = new JButton("");
+		play_btn = new JButton("");
 		play_btn.setBounds(148, 11, 25, 23);
 		panelReproductor.add(play_btn);
 		play_btn.addMouseListener(new MouseAdapter() {
@@ -744,25 +761,33 @@ public class MyFirstPiano extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 
-				lblGrabando.setText("Reproduciendo....");
-				
-//				if ( !listaParaGuardar.isEmpty() ) {
-//					listaParaGuardar.removeAll(listaParaGuardar);
-//				}
-				listaParaGuardar = (ArrayList)listaTeclas.clone();
-				
-								
-				Reproductor r = new Reproductor();
-				r.setListaPulsaciones(listaParaGuardar);
-				r.tocaMelodia();
-				
-				if ( !btnGuardar.isEnabled() ) {
-					btnGuardar.setEnabled( true );
-				}		
+				if  ( !play_btn.isEnabled() ) {					
 
+					lblGrabando.setText("");
+
+				}
+				else{
+					play_btn.setToolTipText("Pulsa para reproducir");
+					UIManager.put("ToolTip.background", Color.RED);
+					lblGrabando.setText("Reproduciendo....");
+
+					listaParaGuardar = (ArrayList)listaTeclas.clone();
+
+					Reproductor r = new Reproductor();
+					r.setListaPulsaciones(listaParaGuardar);
+					r.tocaMelodia();
+
+					if ( !btnGuardar.isEnabled() ) {
+
+						if ( !(userConnected == null) ) {
+
+							btnGuardar.setEnabled( true );
+						}
+
+					}	
+				}
 			}
 
-			
 		});
 
 		play_btn.setForeground(Color.BLACK);
@@ -790,20 +815,20 @@ public class MyFirstPiano extends JFrame {
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				if ( btnGuardar.isEnabled() ) {
-					
+
 					GuardarMelodia g = new GuardarMelodia(this);
 					g.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 					g.setAlwaysOnTop( true );
 					g.setVisible( true );
 					g.setResizable( false );
-					
+
 					guardaMelodia( g.getTxtFieldContent() );				
 				}
-				
+
 				btnGuardar.setToolTipText("Registrate para guardar melodias.");
-				
+
 
 
 
@@ -827,14 +852,14 @@ public class MyFirstPiano extends JFrame {
 		btnExit.setBounds(1101, 346, 37, 32);
 		contentPane.add(btnExit);
 		btnExit.setToolTipText("Salir");
-		
+
 		btnMisMelodias = new JButton("Mis melodias");
 		btnMisMelodias.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed( MouseEvent e ) {
-				
+
 				if ( btnMisMelodias.isEnabled() ) {
-					
+
 					MelodiasUsuario lista = new MelodiasUsuario();				
 					lista.setVisible( true );
 					lista.setResizable( false );
@@ -842,12 +867,12 @@ public class MyFirstPiano extends JFrame {
 					try {
 						lista.setEntityManager(em);
 					} catch (Exception e1) {
-						
+
 						e1.printStackTrace();
 					}
-								
+
 				}
-		
+
 			}
 		});
 		btnMisMelodias.setFont(new Font("SansSerif", Font.BOLD, 11));
@@ -878,7 +903,7 @@ public class MyFirstPiano extends JFrame {
 		}
 
 		tx.commit();	
-		
+
 		listaTeclas.removeAll(listaTeclas);
 
 		lblGrabando.setText("Melodia guardada");
