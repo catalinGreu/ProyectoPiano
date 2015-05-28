@@ -24,6 +24,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.SwingConstants;
+import javax.transaction.Transactional.TxType;
+
 public class GuardarMelodia extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -34,6 +37,7 @@ public class GuardarMelodia extends JDialog {
 	private String nombreCancion;
 	private JButton okButton;
 	private JButton cancelButton;
+	private JLabel lblWarning;
 	/**
 	 * Launch the application.
 	 */
@@ -68,9 +72,18 @@ public class GuardarMelodia extends JDialog {
 		textField.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
+				
 				if ( e.getKeyCode() == KeyEvent.VK_ENTER) {
 					
-					setVisible( false );
+					if ( textField.getText().length() == 0 ) {
+						
+						lblWarning.setText("Debes introducir un nombre");
+						
+					}
+					else{
+						
+						setVisible( false );
+					}					
 					
 				}				
 			}
@@ -82,6 +95,13 @@ public class GuardarMelodia extends JDialog {
 		textField.setBounds(176, 44, 126, 27);
 		contentPanel.add(textField);
 		textField.setColumns(10);
+		
+		lblWarning = new JLabel("");
+		lblWarning.setHorizontalAlignment(SwingConstants.CENTER);
+		lblWarning.setForeground(new Color(204, 0, 0));
+		lblWarning.setFont(new Font("SansSerif", Font.BOLD, 11));
+		lblWarning.setBounds(68, 82, 208, 30);
+		contentPanel.add(lblWarning);
 		{
 			JPanel buttonPane = new JPanel();
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
@@ -91,7 +111,16 @@ public class GuardarMelodia extends JDialog {
 				okButton.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mousePressed(MouseEvent e) {
-						setVisible( false );
+						
+						if ( textField.getText().length() == 0 ) {
+							
+							lblWarning.setText("Debes introducir un nombre");
+							
+						}
+						else {
+							setVisible( false );
+						}
+						
 						
 					}
 				});
@@ -103,6 +132,12 @@ public class GuardarMelodia extends JDialog {
 			}
 			{
 				cancelButton = new JButton("Cancelar");
+				cancelButton.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e) {
+						setVisible(false);
+					}
+				});
 				cancelButton.setForeground(new Color(0, 0, 0));
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
@@ -115,5 +150,4 @@ public class GuardarMelodia extends JDialog {
 		return textField.getText();
 
 	}
-
 }

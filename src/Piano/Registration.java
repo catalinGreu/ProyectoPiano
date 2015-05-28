@@ -222,6 +222,7 @@ public class Registration extends JFrame {
 		panel.add(lblNewLabel);
 
 		JPanel panelButtons = new JPanel();
+		panelButtons.setBackground(new Color(0, 153, 102));
 		panelButtons.setBorder(new EmptyBorder(0, 0, 0, 0));
 		FlowLayout flowLayout = (FlowLayout) panelButtons.getLayout();
 		flowLayout.setHgap(15);
@@ -241,7 +242,7 @@ public class Registration extends JFrame {
 //						btnAceptar.setVisible( false );
 					} catch (Exception ex) {
 						System.out.println("Igual se ha pulsado dos veces");
-						//e.printStackTrace();
+						ex.printStackTrace();
 					}
 
 
