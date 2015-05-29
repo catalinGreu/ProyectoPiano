@@ -768,7 +768,7 @@ public class MyFirstPiano extends JFrame {
 				}
 				else{
 					play_btn.setToolTipText("Pulsa para reproducir");
-					UIManager.put("ToolTip.background", Color.RED);
+					UIManager.put("ToolTip.background", Color.YELLOW);
 					lblGrabando.setText("Reproduciendo....");
 
 					listaParaGuardar = (ArrayList)listaTeclas.clone();
@@ -779,11 +779,10 @@ public class MyFirstPiano extends JFrame {
 
 					if ( !btnGuardar.isEnabled() ) {
 
-						if ( !(userConnected == null) ) {
+						if ( !( userConnected == null ) ) {
 
 							btnGuardar.setEnabled( true );
 						}
-
 					}	
 				}
 			}
@@ -824,6 +823,10 @@ public class MyFirstPiano extends JFrame {
 					g.setVisible( true );
 					g.setResizable( false );
 
+					if ( g.getTxtFieldContent().isEmpty() ) {
+						System.out.println("no guardo nada porque esta vacío");
+						return;
+					}
 					guardaMelodia( g.getTxtFieldContent() );				
 				}
 

@@ -77,18 +77,15 @@ public class GuardarMelodia extends JDialog {
 					
 					if ( textField.getText().length() == 0 ) {
 						
-						lblWarning.setText("Debes introducir un nombre");
-						
+						lblWarning.setText("Debes introducir un nombre");						
 					}
-					else{
+					else{	
 						
 						setVisible( false );
-					}					
-					
+					}						
 				}				
 			}
 		});
-
 
 		textField.setForeground(new Color(0, 0, 0));
 		textField.setFont(new Font("SansSerif", Font.BOLD, 11));

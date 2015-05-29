@@ -2,6 +2,7 @@ package Piano;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 
 import javax.persistence.EntityManager;
@@ -34,7 +35,11 @@ import javax.swing.border.MatteBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.SwingConstants;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MelodiasUsuario extends JFrame {
 
@@ -126,10 +131,16 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed( MouseEvent e ) {
 
+				//
+				//if ( btnReproducir.getModel().isPressed() ) {
+				//		System.out.println("no reproduzco nada y me espero");
+				//}
+
+				//si pulso 1000 veces reproduce 1000 veces seguidas.
 				Melodia m = listPanel.getSelectedValue();
 
 				if ( m == null ) {
-					labelWarn.setText("No tienes melodias guardadas");
+					labelWarn.setText("Debes seleccionar una melodia");
 				}
 
 				else{
@@ -139,6 +150,7 @@ public class MelodiasUsuario extends JFrame {
 					Reproductor r = new Reproductor();
 					r.setListaPulsaciones(pdao.getPulsacionesDeMelodia( m ));
 					r.tocaMelodia();
+
 				}
 			}
 		});
@@ -155,7 +167,8 @@ public class MelodiasUsuario extends JFrame {
 				List<Pulsacion> pulsacionesDeMelodiaQBorro;
 
 				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
-				if ( m == null || pulsacionesDeMelodiaQBorro.isEmpty() ) {
+				
+				if ( m == null ) {
 					labelWarn.setText("No hay melodías para borrar");
 
 				}				
@@ -184,6 +197,27 @@ public class MelodiasUsuario extends JFrame {
 		contentPane.add(btnBorrar);
 
 		btnEditar = new JButton("Editar");
+		btnEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				Melodia m = listPanel.getSelectedValue();
+				GuardarMelodia gm = new GuardarMelodia(this);
+				gm.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
+				gm.setVisible( true );
+				gm.setResizable( false );				
+				
+				m.setNombreMelodia( gm.getTxtFieldContent() );
+				EntityTransaction tx = em.getTransaction();
+				tx.begin();
+				dao.update(m);
+				tx.commit();
+				
+				rellenaListaMelodias();
+				//vuelvo a refrescar lista
+			}
+		});
+		
 		btnEditar.setForeground(new Color(0, 0, 0));
 		btnEditar.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnEditar.setBounds(552, 254, 100, 30);
@@ -223,13 +257,19 @@ public class MelodiasUsuario extends JFrame {
 
 		DefaultListModel<Melodia> model = new DefaultListModel<Melodia>();
 		listPanel.setModel(model);
+
+		if ( listaRetorno.isEmpty()) {
+
+			return;
+
+		}
 		for ( Melodia m : listaRetorno ) {
 
 			model.addElement(m);		
 		}
 		listPanel.setModel( model );
 
-		if ( listaRetorno.size() > 15 ) {
+		if ( listaRetorno.size() > 3 ) {
 			scrollBar.setEnabled( true );
 		}
 	}
