@@ -38,6 +38,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.SwingConstants;
 
+import Piano.Reproductor.HeAcabadoListener;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -58,6 +60,7 @@ public class MelodiasUsuario extends JFrame {
 	private JScrollBar scrollBar;
 	private List<Pulsacion> pulsacionesReproducir;
 	private JLabel labelWarn;
+	Reproductor r;
 
 	private class ListaMelodiasRenderer extends DefaultListCellRenderer {
 
@@ -131,12 +134,13 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed( MouseEvent e ) {
 
-				//
-				//if ( btnReproducir.getModel().isPressed() ) {
-				//		System.out.println("no reproduzco nada y me espero");
-				//}
+				if ( btnReproducir.getText().equals("Parar")) {
 
-				//si pulso 1000 veces reproduce 1000 veces seguidas.
+					r.setPararMelodia( true );
+				}
+
+
+				btnReproducir.setText("Parar");
 				Melodia m = listPanel.getSelectedValue();
 
 				if ( m == null ) {
@@ -144,16 +148,29 @@ public class MelodiasUsuario extends JFrame {
 				}
 
 				else{
+
 					System.out.println(m.getId_melodia());
 					System.out.println(m.getNombreMelodia());
 
-					Reproductor r = new Reproductor();
-					r.setListaPulsaciones(pdao.getPulsacionesDeMelodia( m ));
-					r.tocaMelodia();
 
+					r = new Reproductor();
+					r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
+
+					r.tocaMelodia( new HeAcabadoListener() {
+
+						@Override
+						public void heAcabado() {
+
+							btnReproducir.setText( "Reproducir" ); 
+						}
+					});
 				}
+
 			}
 		});
+
+
+
 		btnReproducir.setForeground(new Color(0, 0, 0));
 		btnReproducir.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnReproducir.setBounds(552, 100, 100, 30);
@@ -167,7 +184,7 @@ public class MelodiasUsuario extends JFrame {
 				List<Pulsacion> pulsacionesDeMelodiaQBorro;
 
 				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
-				
+
 				if ( m == null ) {
 					labelWarn.setText("No hay melodías para borrar");
 
@@ -200,24 +217,24 @@ public class MelodiasUsuario extends JFrame {
 		btnEditar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+
 				Melodia m = listPanel.getSelectedValue();
 				GuardarMelodia gm = new GuardarMelodia(this);
 				gm.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				gm.setVisible( true );
 				gm.setResizable( false );				
-				
+
 				m.setNombreMelodia( gm.getTxtFieldContent() );
 				EntityTransaction tx = em.getTransaction();
 				tx.begin();
 				dao.update(m);
 				tx.commit();
-				
+
 				rellenaListaMelodias();
 				//vuelvo a refrescar lista
 			}
 		});
-		
+
 		btnEditar.setForeground(new Color(0, 0, 0));
 		btnEditar.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnEditar.setBounds(552, 254, 100, 30);
@@ -240,6 +257,14 @@ public class MelodiasUsuario extends JFrame {
 		labelWarn.setHorizontalAlignment(SwingConstants.CENTER);
 		labelWarn.setBounds(466, 55, 186, 24);
 		contentPane.add(labelWarn);
+
+		JButton btnEdit = new JButton("Editar perfil");
+		btnEdit.setForeground( new Color( 0, 0, 0 ));
+		btnEdit.setFont(new Font("SansSerif", Font.BOLD, 12));
+		btnEdit.setHorizontalAlignment(SwingConstants.CENTER);
+
+		btnEdit.setBounds(552, 358, 100, 30);
+		contentPane.add(btnEdit);
 
 
 	}
@@ -280,6 +305,4 @@ public class MelodiasUsuario extends JFrame {
 		lblNombreUser.setText(userConectado.getIDUser() );
 
 	}
-
-
 }

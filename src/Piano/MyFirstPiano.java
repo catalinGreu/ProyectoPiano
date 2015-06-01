@@ -775,7 +775,7 @@ public class MyFirstPiano extends JFrame {
 
 					Reproductor r = new Reproductor();
 					r.setListaPulsaciones(listaParaGuardar);
-					r.tocaMelodia();
+					r.tocaMelodia( null );
 
 					if ( !btnGuardar.isEnabled() ) {
 
