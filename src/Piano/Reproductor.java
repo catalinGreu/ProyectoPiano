@@ -23,13 +23,25 @@ public class Reproductor {
 		public void heAcabado();
 	}
 
-	public void tocaMelodia( HeAcabadoListener l ) {
+	public void tocaMelodia( final HeAcabadoListener l ) {
 
+		Thread t = new Thread( new Runnable(){
+			@Override
+			public void run() {
+				Reproductor.this.run(l);
+			}
+		});
+		t.start();
+	}
+
+	private void run(HeAcabadoListener l) {
 		int tickPorElQueVoy = 0;
+		fuera:
 		while( listaQueDeboTocar.size() > 0 ){
 
 			if( meHanPedidoQuePare() ){
-				return;
+				System.out.println("ME SALGO PORQUE YA NO HAY QUE SEGUIR TOCANDO");
+				break fuera;
 			}
 			Pulsacion p = listaQueDeboTocar.get( 0 );
 			System.out.println( p );
@@ -48,6 +60,7 @@ public class Reproductor {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Ya he acabado");
 
 		if ( l == null ) {
 			return;
@@ -82,13 +95,13 @@ public class Reproductor {
 
 	}
 
-	public void setListaPulsaciones(List<Pulsacion> l ){
+	public void setListaPulsaciones( List<Pulsacion> l ){
 
 		this.listaQueDeboTocar = l;
 
 	}
 	public void setPararMelodia( boolean parar ){
-
+		System.out.println("***********PARA POR DIOSSSS**********************:" + parar );
 		this.parar = parar;
 	}
 

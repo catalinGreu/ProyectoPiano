@@ -51,7 +51,6 @@ public class Melodia {
 		
 		setNombreMelodia( nomMelody );
 		setUser( user );
-//		setId_melodia( idMelody );		
 	}
 	
 	public void addPulsacion( Pulsacion p ){

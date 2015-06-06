@@ -717,6 +717,7 @@ public class MyFirstPiano extends JFrame {
 				}			
 				else{
 					lblGrabando.setText("Grabando...");
+					btnGuardar.setEnabled( false );
 					listaTeclas.removeAll(listaTeclas);
 				}
 			}
@@ -768,20 +769,25 @@ public class MyFirstPiano extends JFrame {
 				}
 				else{
 					play_btn.setToolTipText("Pulsa para reproducir");
-					UIManager.put("ToolTip.background", Color.YELLOW);
 					lblGrabando.setText("Reproduciendo....");
 
 					listaParaGuardar = (ArrayList)listaTeclas.clone();
 
+					if ( listaParaGuardar.isEmpty() ) {
+						lblGrabando.setText("Antes debes grabar");
+						return;
+					}
+					
 					Reproductor r = new Reproductor();
 					r.setListaPulsaciones(listaParaGuardar);
 					r.tocaMelodia( null );
-
+					
 					if ( !btnGuardar.isEnabled() ) {
 
 						if ( !( userConnected == null ) ) {
 
 							btnGuardar.setEnabled( true );
+							lblGrabando.setText("Done.");
 						}
 					}	
 				}
@@ -813,7 +819,7 @@ public class MyFirstPiano extends JFrame {
 		btnGuardar.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/save_small.png")));
 		btnGuardar.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed( MouseEvent e ) {
 
 				if ( btnGuardar.isEnabled() ) {
 

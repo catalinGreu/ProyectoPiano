@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
@@ -61,6 +62,7 @@ public class Registration extends JFrame {
 	private JTextField textFieldID;
 	private JLabel lblConfirmacion;
 
+	Usuario u;
 	private JButton btnAceptar;
 	/**
 	 * Launch the application.
@@ -103,7 +105,7 @@ public class Registration extends JFrame {
 		setResizable(false);
 		setBackground(new Color(153, 153, 153));
 		setImageIcon();
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 653, 493);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -126,6 +128,15 @@ public class Registration extends JFrame {
 		panel.add(lblNombre);
 
 		textFieldNombre = new JTextField();
+		textFieldNombre.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent arg0) {
+				textFieldNombre.selectAll();
+				textFieldNombre.setSelectionColor( new Color ( 51, 102, 255 ) );
+				textFieldNombre.setSelectedTextColor( new Color(255, 255, 255) );
+
+			}
+		});
 		textFieldNombre.setBounds(256, 120, 157, 28);
 		textFieldNombre.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel.add(textFieldNombre);
@@ -139,6 +150,14 @@ public class Registration extends JFrame {
 		panel.add(lblApelido);
 
 		textFieldApellido = new JTextField();
+		textFieldApellido.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldApellido.selectAll();
+				textFieldApellido.setSelectionColor( new Color ( 51, 102, 255 ) );
+				textFieldApellido.setSelectedTextColor( new Color(255, 255, 255) );
+			}
+		});
 		textFieldApellido.setBounds(256, 177, 157, 28);
 		textFieldApellido.setFont(new Font("SansSerif", Font.PLAIN, 12));
 		panel.add(textFieldApellido);
@@ -154,11 +173,13 @@ public class Registration extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent arg0) {
-
-
+			public void focusGained(FocusEvent e) {
+				passwordField.selectAll();
+				passwordField.setSelectionColor( new Color ( 51, 102, 255 ) );
+				passwordField.setSelectedTextColor( new Color(255, 255, 255) );
 			}
 		});
+
 		passwordField.setBounds(256, 284, 157, 28);
 		passwordField.setColumns(14);
 		panel.add(passwordField);
@@ -178,20 +199,15 @@ public class Registration extends JFrame {
 
 					try {
 						registraUsuario();
-						btnAceptar.setVisible( false );
 					} catch (Exception e1) {
 						System.out.println("Se ha debido de presionar enter dos veces");
-						//						e1.printStackTrace();
 					}					
 				}
 			}
 		});
 		passwordField_1.addFocusListener(new FocusAdapter() {
 			@Override
-			public void focusLost(FocusEvent arg0) {				
-
-				String s = passwordField_1.getText();
-				String s1 = passwordField.getText();
+			public void focusLost(FocusEvent arg0) {
 
 				if ( passwordOK() ) {
 
@@ -209,6 +225,13 @@ public class Registration extends JFrame {
 					labelOK2.setVisible(true);
 
 				}
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+				passwordField_1.selectAll();
+				passwordField_1.setSelectionColor( new Color ( 51, 102, 255 ) );
+				passwordField_1.setSelectedTextColor( new Color(255, 255, 255) );
+
 			}
 		});
 		passwordField_1.setBounds(256, 335, 157, 28);
@@ -238,12 +261,18 @@ public class Registration extends JFrame {
 				if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
 
 					try {
+
 						registraUsuario();
-//						btnAceptar.setVisible( false );
+
+						//						btnAceptar.setVisible( false );
 					} catch (Exception ex) {
-						System.out.println("Igual se ha pulsado dos veces");
+
 						ex.printStackTrace();
+						System.out.println("Igual se ha pulsado dos veces");
+						System.out.println("Se ha metido un usuario con ID ya existente.");
+						lblConfirmacion.setText("ID ya existe");
 					}
+
 
 
 				}
@@ -257,10 +286,10 @@ public class Registration extends JFrame {
 
 				try {
 					registraUsuario();
-//					btnAceptar.setVisible( false );
-				} catch (Exception ex) {
+
+				} catch ( Exception ex ) {
 					System.out.println("Igual se ha pulsado dos veces");
-					//e.printStackTrace();
+					ex.printStackTrace();
 				}
 			}
 		});
@@ -272,7 +301,7 @@ public class Registration extends JFrame {
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				setVisible( false );				
+				System.exit(0);				
 			}
 		});
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -295,44 +324,75 @@ public class Registration extends JFrame {
 		panel.add(lblIdUsuario);
 
 		textFieldID = new JTextField();
+		textFieldID.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				textFieldID.selectAll();
+				textFieldID.setSelectionColor( new Color ( 51, 102, 255 ) );
+				textFieldID.setSelectedTextColor( new Color(255, 255, 255) );
+			}
+		});
 		textFieldID.setBounds(256, 234, 157, 28);
 		panel.add(textFieldID);
 		textFieldID.setColumns(10);
 
 		lblConfirmacion = new JLabel("");
-		lblConfirmacion.setFont(new Font("SansSerif", Font.BOLD, 18));
+		lblConfirmacion.setForeground(new Color(153, 0, 0));
+		lblConfirmacion.setFont(new Font("SansSerif", Font.BOLD, 15));
 		lblConfirmacion.setBounds(471, 344, 176, 34);
 		panel.add(lblConfirmacion);
 	}
 
-	public void registraUsuario() throws Exception {
+	public void registraUsuario() {
 
-		Usuario u = new Usuario();
-		dao = new UsuarioHibernate( em );
-		u.setNombre( textFieldNombre.getText() );
-		u.setApellido( textFieldApellido.getText() );
+		if ( textFieldNombre.getText().isEmpty() || textFieldApellido.getText().isEmpty()
+				|| textFieldID.getText().isEmpty() || passwordField.getText().isEmpty()
+				|| passwordField_1.getText().isEmpty() ) {
 
-		if ( passwordOK() ) {
+			System.out.println("No podemos registrar nada");
+			lblConfirmacion.setText("Faltan campos");
+			return;
 
-			u.setPassword( passwordField.getText() );
 		}
+
 		else {
-			lblConfirmacion.setText("Minimoi 5 caracteres");
+
+			u = new Usuario();
+			dao = new UsuarioHibernate( em );
+			u.setNombre( textFieldNombre.getText() );
+			u.setApellido( textFieldApellido.getText() );
+
+			if ( passwordOK() ) {
+
+				u.setPassword( passwordField.getText() );
+			}
+			else {
+				lblConfirmacion.setText("Contraseñas no coinciden");
+				return;
+			}
+
+			u.setIDUser( textFieldID.getText() );
+
+			EntityTransaction tx = this.em.getTransaction();
+			tx.begin();		
+
+			try {
+
+				this.dao.insert( u );
+			} catch (Exception e1) {
+				lblConfirmacion.setText("ID ya existe");
+				e1.printStackTrace();
+				return;
+			}		
+			tx.commit();
+
+			//me esta dejando registrarme con ID que ya existe...pero no lo crea, solo abre la ventana del piano con el ID
 		}
-
-		u.setIDUser( textFieldID.getText() );
-
-		EntityTransaction tx = this.em.getTransaction();
-		tx.begin();		
-		this.dao.insert( u );		
-		tx.commit();
-
-		lblConfirmacion.setText("OK");		
 
 		MyFirstPiano piano = new MyFirstPiano();
 		piano.setVisible( true );
 		piano.setResizable(false);
-				
+
 		piano.setUserConected( u, true );
 		try {
 			piano.setEntityManager(this.em);
@@ -358,11 +418,12 @@ public class Registration extends JFrame {
 			return false;
 		}
 
-		if (field1.length() < 5 || field2.length() < 5) {
+		if ( field1.length() < 5 || field2.length() < 5 ) {
 
+			lblConfirmacion.setText("5 caracteres minimo");
 			return false;
 		}
-		if ( field1.equals(field2) ) {
+		if ( field1.equals( field2 ) ) {
 
 			return true;
 		}

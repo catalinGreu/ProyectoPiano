@@ -68,7 +68,7 @@ public class Inicio extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("derby");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
 		final EntityManager em = emf.createEntityManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -144,6 +144,8 @@ public class Inicio extends JFrame {
 			@Override
 			public void focusGained(FocusEvent e) {
 				textFieldUser.selectAll();
+				textFieldUser.setSelectionColor( new Color( 51, 102, 255 ) );
+				textFieldUser.setSelectedTextColor( new Color( 255, 255, 255 ) );
 			}
 		});
 		textFieldUser.addKeyListener(new KeyAdapter() {
@@ -183,6 +185,8 @@ public class Inicio extends JFrame {
 			public void focusGained(FocusEvent arg0) {
 
 				passwordField.selectAll();
+				passwordField.setSelectionColor( new Color( 51, 102, 255 ) );
+				passwordField.setSelectedTextColor( new Color( 255, 255, 255 ) );
 			}
 		});
 		passwordField.addKeyListener(new KeyAdapter() {
@@ -223,8 +227,10 @@ public class Inicio extends JFrame {
 		});
 		btnAceptar.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnAceptar.setForeground(new Color(0, 0, 0));
+		btnAceptar.setToolTipText("Pulsa para comenzar");
 		panelBotones.add(btnAceptar);
 
+		
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addMouseListener(new MouseAdapter() {
 			@Override
@@ -236,6 +242,7 @@ public class Inicio extends JFrame {
 
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnCancelar.setForeground(new Color(0, 0, 0));
+		btnCancelar.setToolTipText("Cancelar y salir");
 		panelBotones.add(btnCancelar);
 
 		JPanel panelNorth = new JPanel();
@@ -275,15 +282,15 @@ public class Inicio extends JFrame {
 		panel.setBackground(new Color(0, 153, 102));
 		panelEste.add(panel, BorderLayout.SOUTH);
 
-		JButton btnNewButton = new JButton("Registro");
-		btnNewButton.setForeground(new Color(0, 0, 0));
-		btnNewButton.addMouseListener(new MouseAdapter() {
+		JButton btnRegistro = new JButton("Registro");
+		btnRegistro.setForeground(new Color(0, 0, 0));
+		btnRegistro.setToolTipText("Pulsa para registrarte");
+		btnRegistro.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed (MouseEvent arg0) {
 
 				Registration r = new Registration(this);
 				r.setVisible(true);
-				r.setAlwaysOnTop(true);
 
 				setVisible(false);
 				//				r.pack();
@@ -298,8 +305,9 @@ public class Inicio extends JFrame {
 
 			}
 		});
-		btnNewButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-		panel.add(btnNewButton);
+		btnRegistro.setFont(new Font("SansSerif", Font.BOLD, 14));
+	
+		panel.add(btnRegistro);
 
 		JButton btnNewButton_1 = new JButton("Juego Rapido");
 		btnNewButton_1.setForeground(new Color(0, 0, 0));
@@ -316,6 +324,7 @@ public class Inicio extends JFrame {
 			}
 		});
 		btnNewButton_1.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnNewButton_1.setToolTipText("Partida rapida");
 		panel.add(btnNewButton_1);
 
 		labelWarning = new Label("");

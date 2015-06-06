@@ -25,8 +25,16 @@ public class UsuarioHibernate {
 	}
 
 	public void insert ( Usuario u ){
-
-		em.persist( u );		
+		
+		if ( u.getIDUser().equals( findByPrimaryKey( u ).getIDUser() ) ) {
+			
+			System.out.println("EL ID ya existe");
+			return;
+		}
+		else {
+			em.persist( u );
+		}
+				
 	}
 
 	public void delete ( Usuario u ){

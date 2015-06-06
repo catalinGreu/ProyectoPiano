@@ -25,7 +25,7 @@ public class Usuario {
 
 	@Column 
 	String apellido;
-	
+
 	@Column 
 	String password;
 
@@ -70,7 +70,7 @@ public class Usuario {
 	}
 
 	public Usuario(){}
-	
+
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -102,23 +102,22 @@ public class Usuario {
 	public void setPassword( String password ) {
 		this.password = password;
 	}
-	
+
 	//equals si ID y Password son iguales
 	@Override
 	public boolean equals( Object obj ) {
-		
+
 		Usuario u = (Usuario) obj;
-		
-		if ( u.getIDUser().equals( this.getIDUser() ) ) {
-			
-			if ( u.getPassword().equals( this.getPassword() )) {
+
+		if ( u.getIDUser().equals( getIDUser() ) ) {
+			if ( u.getPassword().equals( getPassword() )) {
 				
 				return true;
-			}			
+			}
 		}
-		
+
 		return false;
-	
+
 	}
 
 	@Override

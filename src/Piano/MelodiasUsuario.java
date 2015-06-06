@@ -134,13 +134,13 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed( MouseEvent e ) {
 
+				System.out.println(btnReproducir.getText());
+				
 				if ( btnReproducir.getText().equals("Parar")) {
 
 					r.setPararMelodia( true );
 				}
-
-
-				btnReproducir.setText("Parar");
+				
 				Melodia m = listPanel.getSelectedValue();
 
 				if ( m == null ) {
@@ -148,11 +148,9 @@ public class MelodiasUsuario extends JFrame {
 				}
 
 				else{
-
-					System.out.println(m.getId_melodia());
-					System.out.println(m.getNombreMelodia());
-
-
+					
+					btnReproducir.setText("Parar");
+					
 					r = new Reproductor();
 					r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
 
@@ -180,6 +178,7 @@ public class MelodiasUsuario extends JFrame {
 		btnBorrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
+				
 				Melodia m = listPanel.getSelectedValue();
 				List<Pulsacion> pulsacionesDeMelodiaQBorro;
 
@@ -219,16 +218,24 @@ public class MelodiasUsuario extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 
 				Melodia m = listPanel.getSelectedValue();
+				
 				GuardarMelodia gm = new GuardarMelodia(this);
 				gm.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				gm.setVisible( true );
 				gm.setResizable( false );				
 
-				m.setNombreMelodia( gm.getTxtFieldContent() );
-				EntityTransaction tx = em.getTransaction();
-				tx.begin();
-				dao.update(m);
-				tx.commit();
+				if ( m != null ) {
+					
+					m.setNombreMelodia( gm.getTxtFieldContent() );
+					EntityTransaction tx = em.getTransaction();
+					tx.begin();
+					dao.update(m);
+					tx.commit();					
+				}
+				else {
+					System.out.println("No se puede editar");
+				}
+				
 
 				rellenaListaMelodias();
 				//vuelvo a refrescar lista
