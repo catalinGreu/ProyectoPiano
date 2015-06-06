@@ -299,7 +299,7 @@ public class Inicio extends JFrame {
 				try {
 					r.setEntityManager( em );
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 

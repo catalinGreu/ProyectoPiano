@@ -26,15 +26,16 @@ public class UsuarioHibernate {
 
 	public void insert ( Usuario u ){
 		
-		if ( u.getIDUser().equals( findByPrimaryKey( u ).getIDUser() ) ) {
-			
-			System.out.println("EL ID ya existe");
-			return;
-		}
-		else {
+		if ( findByPrimaryKey(u) == null ) {
+		
 			em.persist( u );
 		}
-				
+		
+		if ( u.getIDUser().equals(findByPrimaryKey(u).getIDUser() ) ) {
+			
+			System.out.println("NO KASKES POR DIOS!!!!!!!!");
+		}		
+
 	}
 
 	public void delete ( Usuario u ){
@@ -47,16 +48,16 @@ public class UsuarioHibernate {
 		TypedQuery<Usuario> q = em.createQuery("from Usuario where id_user=:id", Usuario.class);
 		q.setParameter("id", u.getIDUser() );
 		List<Usuario> resultList = q.getResultList();
-		
+
 		if ( resultList.isEmpty() ) {
-			
+
 			System.out.println("El usuario no existe");
 			return null;
 		}
-		
+
 		return resultList.get(0);
 	}
-	
+
 
 	public List findAll( Usuario u ){
 		TypedQuery<Usuario> q = em.createQuery("from Usuario", Usuario.class );
@@ -65,28 +66,28 @@ public class UsuarioHibernate {
 	}
 
 	public static void main(String[] args) {
-		
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
-			EntityManager em = emf.createEntityManager();
-			
-			Usuario u = new Usuario("Catalin", "Greu", "cata_greu94", "12345");
-			Melodia m = new Melodia("fur elise", u );
-			Pulsacion p = new Pulsacion("1.DO3.wav", 45.0);
-			Pulsacion d = new Pulsacion("3.Reb", 89.0 );
-			
-			u.addMelodia( m );
-			m.addPulsacion( p );
-			m.addPulsacion( d );
-			EntityTransaction tx = em.getTransaction();
-			
-			tx.begin();
-			em.persist( u );
-			em.persist( m );
-			
-			em.persist( p ); //añado pulsaciones
-			em.persist( d );
-			
-			tx.commit();
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
+		EntityManager em = emf.createEntityManager();
+
+		Usuario u = new Usuario("Catalin", "Greu", "cata_greu94", "12345");
+		Melodia m = new Melodia("fur elise", u );
+		Pulsacion p = new Pulsacion("1.DO3.wav", 45.0);
+		Pulsacion d = new Pulsacion("3.Reb", 89.0 );
+
+		u.addMelodia( m );
+		m.addPulsacion( p );
+		m.addPulsacion( d );
+		EntityTransaction tx = em.getTransaction();
+
+		tx.begin();
+		em.persist( u );
+		em.persist( m );
+
+		em.persist( p ); //añado pulsaciones
+		em.persist( d );
+
+		tx.commit();
 	}
 
 }
