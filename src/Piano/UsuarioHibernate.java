@@ -25,16 +25,8 @@ public class UsuarioHibernate {
 	}
 
 	public void insert ( Usuario u ){
-		
-		if ( findByPrimaryKey(u) == null ) {
-		
-			em.persist( u );
-		}
-		
-		if ( u.getIDUser().equals(findByPrimaryKey(u).getIDUser() ) ) {
-			
-			System.out.println("NO KASKES POR DIOS!!!!!!!!");
-		}		
+
+		em.persist(u);
 
 	}
 

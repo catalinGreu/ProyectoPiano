@@ -374,36 +374,39 @@ public class Registration extends JFrame {
 			u.setIDUser( textFieldID.getText() );
 
 			EntityTransaction tx = this.em.getTransaction();
-			tx.begin();		
+			if ( !tx.isActive() ) {
+				tx.begin();
+			}
+			
 
-			try {
+			if ( dao.findByPrimaryKey(u) == null ) {
 
 				this.dao.insert( u );
-			} catch (Exception e1) {
-				lblConfirmacion.setText("ID ya existe");
-				e1.printStackTrace();
+
+				MyFirstPiano piano = new MyFirstPiano();
+				piano.setVisible( true );
+				piano.setResizable(false);
+
+				piano.setUserConected( u, true );
+				try {
+					piano.setEntityManager(this.em);
+					setVisible( false );
+				} catch (Exception ex) {
+
+					ex.printStackTrace();
+				}	
+
+
+			}
+			else if ( u.getIDUser().equals( dao.findByPrimaryKey(u).getIDUser() ) ) {
+
+				lblConfirmacion.setText("El ID ya existe");
 				return;
-			}		
+			}
+
 			tx.commit();
 
-			//me esta dejando registrarme con ID que ya existe...pero no lo crea, solo abre la ventana del piano con el ID
 		}
-
-		MyFirstPiano piano = new MyFirstPiano();
-		piano.setVisible( true );
-		piano.setResizable(false);
-
-		piano.setUserConected( u, true );
-		try {
-			piano.setEntityManager(this.em);
-			setVisible( false );
-		} catch (Exception ex) {
-
-			ex.printStackTrace();
-		}		
-
-		//		this.frame.setVisible(false);	
-
 
 	}
 
