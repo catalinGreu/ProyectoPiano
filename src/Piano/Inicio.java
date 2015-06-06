@@ -68,7 +68,7 @@ public class Inicio extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("derby");
 		final EntityManager em = emf.createEntityManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -337,6 +337,7 @@ public class Inicio extends JFrame {
 
 		if (textFieldUser.getText().equals("") || (passwordField.getText().equals(""))) {
 			labelWarning.setText("Introduzca usuario y contraseña" );
+			textFieldUser.requestFocus();
 		}
 
 		else{
@@ -352,6 +353,7 @@ public class Inicio extends JFrame {
 			if ( userFound == null ) {
 
 				labelWarning.setText("Usuario inexistente");
+				textFieldUser.requestFocus();
 				System.out.println("Usuario no existe, o esta malpuesto");
 			}
 
@@ -369,6 +371,7 @@ public class Inicio extends JFrame {
 			}
 			else {
 				labelWarning.setText("No existe el usuario");
+				textFieldUser.requestFocus();
 
 			}
 		}
@@ -376,26 +379,3 @@ public class Inicio extends JFrame {
 	}
 
 }
-
-//	public void setBackground(){
-//		URL bgImage=this.getClass().getResource("fondoinicio.jpg");
-//		BufferedImage bg=null;
-//		try {
-//			bg = ImageIO.read(bgImage);
-//		} catch (IOException e) {
-//			System.out.println("Background image does not exist!");
-//		}
-//				setContentPane(	new ImagePanel(bg));
-//	}
-
-//	private boolean userExists( Usuario u ) {
-//		
-//		Query q = getSession.cre
-//		return false;
-//	}
-
-
-//
-
-
-

@@ -787,7 +787,6 @@ public class MyFirstPiano extends JFrame {
 						if ( !( userConnected == null ) ) {
 
 							btnGuardar.setEnabled( true );
-							lblGrabando.setText("Done.");
 						}
 					}	
 				}
