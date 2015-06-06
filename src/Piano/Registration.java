@@ -338,8 +338,8 @@ public class Registration extends JFrame {
 
 		lblConfirmacion = new JLabel("");
 		lblConfirmacion.setForeground(new Color(153, 0, 0));
-		lblConfirmacion.setFont(new Font("SansSerif", Font.BOLD, 15));
-		lblConfirmacion.setBounds(471, 344, 176, 34);
+		lblConfirmacion.setFont(new Font("SansSerif", Font.BOLD, 14));
+		lblConfirmacion.setBounds(432, 397, 215, 34);
 		panel.add(lblConfirmacion);
 	}
 
