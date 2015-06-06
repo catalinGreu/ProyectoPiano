@@ -377,9 +377,7 @@ public class Registration extends JFrame {
 			if ( !tx.isActive() ) {
 				tx.begin();
 			}
-			else {
-				tx.rollback();
-			}
+			
 			//esto no va
 
 			if ( dao.findByPrimaryKey(u) == null ) {
