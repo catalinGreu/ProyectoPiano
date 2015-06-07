@@ -44,13 +44,12 @@ public class Reproductor {
 				break fuera;
 			}
 			Pulsacion p = listaQueDeboTocar.get( 0 );
-			System.out.println( p );
+			
 			if( p.getTick() <= tickPorElQueVoy ){
 				playSound( p.getNombreNota() );
 				listaQueDeboTocar.remove( 0 );
 			}
 			else{
-				System.out.println("En este tick no toco");
 				System.out.println();
 			}
 			tickPorElQueVoy += 1;

@@ -172,6 +172,15 @@ public class MyFirstPiano extends JFrame {
 	 * Create the frame.
 	 */
 	public MyFirstPiano() {
+		addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed( KeyEvent e ) {
+
+				if ( e.getKeyCode() == 87 ) {
+					playSound("3.RE3.wav");
+				}
+			}
+		});
 		setImageIcon();
 		setResizable(false);
 		setBackground(new Color(51, 153, 102));
@@ -251,7 +260,7 @@ public class MyFirstPiano extends JFrame {
 				//				clip.close();
 			}
 		});
-		btnMi.setBounds(167, 33, 48, 284);
+		btnMi.setBounds(167, 33, 53, 284);
 		contentPane.add(btnMi);
 
 		JButton btnReb3 = new JButton("");
@@ -750,7 +759,7 @@ public class MyFirstPiano extends JFrame {
 					timer.stop();
 					contador = 0;					
 				}
-				
+
 			}
 		});
 		stop_btn.setActionCommand("stop");
@@ -779,11 +788,11 @@ public class MyFirstPiano extends JFrame {
 						lblGrabando.setText("Antes debes grabar");
 						return;
 					}
-					
+
 					Reproductor r = new Reproductor();
 					r.setListaPulsaciones(listaParaGuardar);
 					r.tocaMelodia( null );
-					
+
 					if ( !btnGuardar.isEnabled() ) {
 
 						if ( !( userConnected == null ) ) {
@@ -823,7 +832,8 @@ public class MyFirstPiano extends JFrame {
 			public void mousePressed( MouseEvent e ) {
 
 				if ( btnGuardar.isEnabled() ) {
-					
+
+					btnGuardar.setToolTipText("Guardar melodia");
 					GuardarMelodia g = new GuardarMelodia(this);
 					g.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 					g.setAlwaysOnTop( true );
@@ -834,23 +844,19 @@ public class MyFirstPiano extends JFrame {
 						System.out.println("no guardo nada porque esta vacío");
 						return;
 					}
-					
+
 					if ( g.getBotonPulsado() == null) {
 						return;
 					}
 					if (g.getBotonPulsado().equals("GUARDAR")) {
-						
+
 						guardaMelodia( g.getTxtFieldContent() );
 					}
 					else {
 						return;
 					}
-									
+
 				}
-
-				btnGuardar.setToolTipText("Registrate para guardar melodias.");
-
-
 
 
 			}
@@ -882,7 +888,7 @@ public class MyFirstPiano extends JFrame {
 
 				if ( btnMisMelodias.isEnabled() ) {
 
-					MelodiasUsuario lista = new MelodiasUsuario();				
+					MelodiasUsuario lista = new MelodiasUsuario(this);	
 					lista.setVisible( true );
 					lista.setResizable( false );
 					lista.setUsuario( userConnected );	

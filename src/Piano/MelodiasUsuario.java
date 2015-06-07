@@ -49,6 +49,8 @@ public class MelodiasUsuario extends JFrame {
 	private EntityManager em;
 	private MelodiaHibernate dao;
 	private PulsacionHibernate pdao;
+	
+	private UsuarioHibernate newuser;
 	private Usuario userConectado;
 	private JLabel lblConnected;
 	private JLabel lblNombreUser;
@@ -62,6 +64,7 @@ public class MelodiasUsuario extends JFrame {
 	private JLabel labelWarn;
 	Reproductor r;
 
+	EntityTransaction tx;
 	private class ListaMelodiasRenderer extends DefaultListCellRenderer {
 
 		@Override
@@ -84,7 +87,7 @@ public class MelodiasUsuario extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					MelodiasUsuario frame = new MelodiasUsuario();
+					MelodiasUsuario frame = new MelodiasUsuario(null);
 					frame.setVisible(true);
 
 				} catch (Exception e) {
@@ -100,7 +103,7 @@ public class MelodiasUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	@SuppressWarnings("unchecked")
-	public MelodiasUsuario() {
+	public MelodiasUsuario(MouseAdapter mouseAdapter) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MelodiasUsuario.class.getResource("/Piano/logo.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 678, 452);
@@ -187,6 +190,7 @@ public class MelodiasUsuario extends JFrame {
 					return;
 				}
 
+				labelWarn.setText("");
 				ConfirmaBorrar  conf = new ConfirmaBorrar();
 				conf.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				conf.setVisible( true );
@@ -196,13 +200,13 @@ public class MelodiasUsuario extends JFrame {
 
 				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
 
-				if (conf.getBotonPulsado() == null ) {
+				if ( conf.getBotonPulsado() == null ) {
 					System.out.println("Me salgo porque no se ha pulsado nada");
 					return;
 				}
 				if ( conf.getBotonPulsado().equals("SI") ) {
 
-					EntityTransaction tx = em.getTransaction();
+					tx = em.getTransaction();
 					tx.begin();
 
 					for ( Pulsacion p : pulsacionesDeMelodiaQBorro ) {
@@ -243,6 +247,7 @@ public class MelodiasUsuario extends JFrame {
 					return;
 				}
 
+				labelWarn.setText("");
 				GuardarMelodia gm = new GuardarMelodia(this);
 				gm.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				gm.setVisible( true );
@@ -262,7 +267,7 @@ public class MelodiasUsuario extends JFrame {
 					if ( m != null ) {
 
 						m.setNombreMelodia( gm.getTxtFieldContent() );
-						EntityTransaction tx = em.getTransaction();
+						tx = em.getTransaction();
 						tx.begin();
 						dao.update(m);
 						tx.commit();					
@@ -299,10 +304,52 @@ public class MelodiasUsuario extends JFrame {
 		labelWarn.setForeground(new Color(204, 0, 0));
 		labelWarn.setFont(new Font("SansSerif", Font.BOLD, 12));
 		labelWarn.setHorizontalAlignment(SwingConstants.CENTER);
-		labelWarn.setBounds(466, 55, 186, 24);
+		labelWarn.setBounds(431, 55, 221, 24);
 		contentPane.add(labelWarn);
 
 		JButton btnEdit = new JButton("Editar perfil");
+		btnEdit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				tx = em.getTransaction();
+				EditarPerfil edit = new EditarPerfil();
+				edit.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
+				edit.setVisible( true );
+				edit.setResizable( false );
+				
+				if ( edit.getBotonPulsado() == null ) {
+					return;
+				}
+				if (  edit.getBotonPulsado().equals("CANCELAR") ) {
+					return;
+				}
+				
+				if (  edit.getBotonPulsado().equals("ACEPTAR") ) {
+					
+					labelWarn.setText("Usuario modificado con exito");
+					newuser = new UsuarioHibernate(em);
+					
+					userConectado = newuser.findByPrimaryKey(userConectado);
+					
+					System.out.println("Nombre: " + userConectado.getNombre() + " " + "ID: " + userConectado.getIDUser());
+					userConectado.setNombre( edit.getNewName() );
+					userConectado.setApellido( edit.getNewApe() );
+					userConectado.setPassword( edit.getNewPass() );
+					
+					System.out.println("Nombre: " + userConectado.getNombre() + " " + "ID: " + userConectado.getIDUser());
+					
+					
+					if ( !tx.isActive() ) {
+						tx.begin();
+					}
+					
+					em.persist(userConectado);
+					tx.commit();				
+					
+					
+				}
+			}
+		});
 		btnEdit.setForeground( new Color( 0, 0, 0 ));
 		btnEdit.setFont(new Font("SansSerif", Font.BOLD, 12));
 		btnEdit.setHorizontalAlignment(SwingConstants.CENTER);
@@ -338,7 +385,7 @@ public class MelodiasUsuario extends JFrame {
 		}
 		listPanel.setModel( model );
 
-		if ( listaRetorno.size() > 3 ) {
+		if ( listaRetorno.size() > 10 ) {
 			scrollBar.setEnabled( true );
 		}
 	}

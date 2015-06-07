@@ -15,6 +15,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Toolkit;
 
 public class ConfirmaBorrar extends JDialog {
 
@@ -38,6 +39,7 @@ public class ConfirmaBorrar extends JDialog {
 	 * Create the dialog.
 	 */
 	public ConfirmaBorrar() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(ConfirmaBorrar.class.getResource("/Piano/warning.png")));
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 337, 202);
 		getContentPane().setLayout(new BorderLayout());
@@ -52,7 +54,10 @@ public class ConfirmaBorrar extends JDialog {
 		contentPanel.add(lblestaSeguroDe);
 		{
 			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
+			FlowLayout fl_buttonPane = new FlowLayout(FlowLayout.CENTER);
+			fl_buttonPane.setVgap(10);
+			fl_buttonPane.setHgap(15);
+			buttonPane.setLayout(fl_buttonPane);
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
 			JButton btnOk = new JButton("Si");
