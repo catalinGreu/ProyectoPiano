@@ -251,7 +251,7 @@ public class MyFirstPiano extends JFrame {
 				//				clip.close();
 			}
 		});
-		btnMi.setBounds(164, 33, 51, 284);
+		btnMi.setBounds(167, 33, 48, 284);
 		contentPane.add(btnMi);
 
 		JButton btnReb3 = new JButton("");
@@ -309,7 +309,7 @@ public class MyFirstPiano extends JFrame {
 				//				clip.close();
 			}
 		});
-		btnNewButton_1.setBounds(214, 33, 53, 284);
+		btnNewButton_1.setBounds(216, 33, 51, 284);
 		contentPane.add(btnNewButton_1);
 
 		btnSolb = new JButton("");
@@ -734,6 +734,7 @@ public class MyFirstPiano extends JFrame {
 		stop_btn = new JButton("");
 		stop_btn.setIcon(new ImageIcon(MyFirstPiano.class.getResource("/Piano/stop2.png")));
 		stop_btn.setBounds(93, 11, 25, 23);
+		stop_btn.setToolTipText("Parar de grabar");
 		panelReproductor.add(stop_btn);
 		stop_btn.addMouseListener(new MouseAdapter() {
 			@Override
@@ -755,6 +756,7 @@ public class MyFirstPiano extends JFrame {
 		stop_btn.setActionCommand("stop");
 
 		play_btn = new JButton("");
+		play_btn.setToolTipText("Pulsa para reproducir");
 		play_btn.setBounds(148, 11, 25, 23);
 		panelReproductor.add(play_btn);
 		play_btn.addMouseListener(new MouseAdapter() {
@@ -821,7 +823,7 @@ public class MyFirstPiano extends JFrame {
 			public void mousePressed( MouseEvent e ) {
 
 				if ( btnGuardar.isEnabled() ) {
-
+					
 					GuardarMelodia g = new GuardarMelodia(this);
 					g.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 					g.setAlwaysOnTop( true );
@@ -832,7 +834,18 @@ public class MyFirstPiano extends JFrame {
 						System.out.println("no guardo nada porque esta vacío");
 						return;
 					}
-					guardaMelodia( g.getTxtFieldContent() );				
+					
+					if ( g.getBotonPulsado() == null) {
+						return;
+					}
+					if (g.getBotonPulsado().equals("GUARDAR")) {
+						
+						guardaMelodia( g.getTxtFieldContent() );
+					}
+					else {
+						return;
+					}
+									
 				}
 
 				btnGuardar.setToolTipText("Registrate para guardar melodias.");
@@ -862,6 +875,7 @@ public class MyFirstPiano extends JFrame {
 		btnExit.setToolTipText("Salir");
 
 		btnMisMelodias = new JButton("Mis melodias");
+		btnMisMelodias.setToolTipText("Mi lista de melodias");
 		btnMisMelodias.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed( MouseEvent e ) {

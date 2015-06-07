@@ -134,13 +134,13 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed( MouseEvent e ) {
 
-				System.out.println(btnReproducir.getText());
-				
+				System.out.println( btnReproducir.getText() );
+
 				if ( btnReproducir.getText().equals("Parar")) {
 
 					r.setPararMelodia( true );
 				}
-				
+
 				Melodia m = listPanel.getSelectedValue();
 
 				if ( m == null ) {
@@ -149,8 +149,9 @@ public class MelodiasUsuario extends JFrame {
 
 				else{
 					
+					labelWarn.setText("");
 					btnReproducir.setText("Parar");
-					
+
 					r = new Reproductor();
 					r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
 
@@ -178,24 +179,35 @@ public class MelodiasUsuario extends JFrame {
 		btnBorrar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				
+
 				Melodia m = listPanel.getSelectedValue();
+
+				if ( m == null ) {
+					labelWarn.setText("Seleccione una melodia");
+					return;
+				}
+
+				ConfirmaBorrar  conf = new ConfirmaBorrar();
+				conf.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
+				conf.setVisible( true );
+				conf.setResizable( false );
+
 				List<Pulsacion> pulsacionesDeMelodiaQBorro;
 
 				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
 
-				if ( m == null ) {
-					labelWarn.setText("No hay melodías para borrar");
+				if (conf.getBotonPulsado() == null ) {
+					System.out.println("Me salgo porque no se ha pulsado nada");
+					return;
+				}
+				if ( conf.getBotonPulsado().equals("SI") ) {
 
-				}				
-
-				else{
 					EntityTransaction tx = em.getTransaction();
 					tx.begin();
 
-					for (Pulsacion p : pulsacionesDeMelodiaQBorro) {
+					for ( Pulsacion p : pulsacionesDeMelodiaQBorro ) {
 
-						pdao.delete(p);					
+						pdao.delete( p );					
 					}
 
 					dao.delete(m);
@@ -204,8 +216,15 @@ public class MelodiasUsuario extends JFrame {
 					model.removeElement( m );
 					//refresco la lista
 					//kaska, no borro melodia de tabla pulsaciones
+
 				}
+				else {
+					System.out.println("No se borra nada");
+					return;
+				}
+
 			}
+
 		});
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setFont(new Font("SansSerif", Font.BOLD, 11));
@@ -218,24 +237,42 @@ public class MelodiasUsuario extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 
 				Melodia m = listPanel.getSelectedValue();
-				
+
+				if ( m == null ) {
+					labelWarn.setText("Seleccione una melodia");
+					return;
+				}
+
 				GuardarMelodia gm = new GuardarMelodia(this);
 				gm.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				gm.setVisible( true );
-				gm.setResizable( false );				
+				gm.setResizable( false );
 
-				if ( m != null ) {
-					
-					m.setNombreMelodia( gm.getTxtFieldContent() );
-					EntityTransaction tx = em.getTransaction();
-					tx.begin();
-					dao.update(m);
-					tx.commit();					
+				if ( gm.getTxtFieldContent().isEmpty() ) {
+					System.out.println("No editamos nada");
+					return;
 				}
-				else {
-					System.out.println("No se puede editar");
+
+				if ( gm.getBotonPulsado() == null ) {
+					System.out.println("Tampoco hago nada");
+					return;
 				}
-				
+				if ( gm.getBotonPulsado().equals("GUARDAR") ) {
+
+					if ( m != null ) {
+
+						m.setNombreMelodia( gm.getTxtFieldContent() );
+						EntityTransaction tx = em.getTransaction();
+						tx.begin();
+						dao.update(m);
+						tx.commit();					
+					}
+
+				}
+
+				if (gm.getBotonPulsado().equals("CANCELAR")) {
+					return;
+				}
 
 				rellenaListaMelodias();
 				//vuelvo a refrescar lista

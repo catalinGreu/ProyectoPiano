@@ -38,6 +38,7 @@ public class GuardarMelodia extends JDialog {
 	private JButton okButton;
 	private JButton cancelButton;
 	private JLabel lblWarning;
+	private String boton;
 	/**
 	 * Launch the application.
 	 */
@@ -80,7 +81,7 @@ public class GuardarMelodia extends JDialog {
 						lblWarning.setText("Debes introducir un nombre");						
 					}
 					else{	
-						
+						boton = "GUARDAR";
 						setVisible( false );
 					}						
 				}				
@@ -115,6 +116,7 @@ public class GuardarMelodia extends JDialog {
 							
 						}
 						else {
+							boton = "GUARDAR";
 							setVisible( false );
 						}
 						
@@ -132,6 +134,7 @@ public class GuardarMelodia extends JDialog {
 				cancelButton.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mousePressed(MouseEvent e) {
+						boton = "CANCELAR";
 						setVisible(false);
 					}
 				});
@@ -146,5 +149,8 @@ public class GuardarMelodia extends JDialog {
 		
 		return textField.getText();
 
+	}
+	public String getBotonPulsado(){
+		return this.boton;
 	}
 }

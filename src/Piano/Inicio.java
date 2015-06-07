@@ -68,7 +68,7 @@ public class Inicio extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("derby");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
 		final EntityManager em = emf.createEntityManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

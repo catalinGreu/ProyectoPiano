@@ -366,8 +366,13 @@ public class Registration extends JFrame {
 
 				u.setPassword( passwordField.getText() );
 			}
+			else if( passwordField.getText().length() < 5 || passwordField_1.getText().length() < 5 ) {
+				lblConfirmacion.setText("5 caracteres minimo");
+
+				return;
+			}
 			else {
-				lblConfirmacion.setText("Contraseñas no coinciden");
+				lblConfirmacion.setText("Contraseñas no coinicden");
 				return;
 			}
 
@@ -424,7 +429,6 @@ public class Registration extends JFrame {
 
 		if ( field1.length() < 5 || field2.length() < 5 ) {
 
-			lblConfirmacion.setText("5 caracteres minimo");
 			return false;
 		}
 		if ( field1.equals( field2 ) ) {
