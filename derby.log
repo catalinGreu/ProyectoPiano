@@ -1,6 +1,6 @@
 ----------------------------------------------------------------
-Sun Jun 07 13:02:34 CEST 2015:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014d-cdaf-b547-0000006cdb90 
+Mon Jun 08 10:55:12 CEST 2015:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.1 - (1616546): instance a816c00e-014d-d261-75fd-0000006a0788 
 on database directory C:\Users\Catalin\workspace\Interfaces_Graficas\userDB with class loader sun.misc.Launcher$AppClassLoader@1d16e93 
 Loaded from file:/C:/Users/Catalin/workspace/Interfaces_Graficas/lib/derby.jar
 java.vendor=Oracle Corporation

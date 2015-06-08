@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class ConfirmaBorrar extends JDialog {
 
@@ -61,6 +63,17 @@ public class ConfirmaBorrar extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			
 			JButton btnOk = new JButton("Si");
+			btnOk.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+					if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+						contenidoBoton = "SI";
+						setVisible( false );
+						
+					}
+				}
+			});
 			btnOk.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent arg0) {
@@ -72,6 +85,17 @@ public class ConfirmaBorrar extends JDialog {
 			buttonPane.add(btnOk);
 			
 			JButton btnNewButton = new JButton("No");
+			btnNewButton.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					
+					if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+						contenidoBoton = "NO";
+						setVisible( false );
+						
+					}
+				}
+			});
 			btnNewButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {

@@ -291,10 +291,10 @@ public class Inicio extends JFrame {
 
 				Registration r = new Registration(this);
 				r.setVisible(true);
-
+				r.setResizable(true);
 				setVisible(false);
 				//				r.pack();
-				r.setPreferredSize( PREFERRED );
+//				r.setPreferredSize( PREFERRED );
 
 				try {
 					r.setEntityManager( em );

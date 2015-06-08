@@ -51,23 +51,40 @@ public class EditarPerfil extends JDialog {
 	}
 
 	public String getBotonPulsado() {
-		
+
 		return this.elBoton;
 	}
-	
+
 	public String getNewName(){
-		
+
 		return textFieldNombre.getText();
 	}
-	
+
 	public String getNewApe(){
-		
+
 		return textFieldApe.getText();
 	}
-	
+
 	public String getNewPass(){
-		
+
 		return passFieldPass.getText();
+	}
+
+	public boolean todoOK(){
+		if (textFieldNombre.getText().isEmpty() || textFieldApe.getText().isEmpty()  
+				|| passFieldPass.getText().isEmpty() ){
+
+			labelAviso.setText( "Faltan campos" );
+			return false;
+
+		}
+
+		if ( passFieldPass.getText().length() < 5 ) {
+
+			labelAviso.setText( "5 caracteres minimo" );
+			return false;
+		}
+		return true;
 	}
 	/**
 	 * Create the frame.
@@ -81,48 +98,51 @@ public class EditarPerfil extends JDialog {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblNombre = new JLabel("Nuevo Nombre");
 		lblNombre.setForeground(new Color(0, 0, 0));
 		lblNombre.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblNombre.setBounds(147, 85, 106, 21);
 		contentPane.add(lblNombre);
-		
+
 		JLabel lblId = new JLabel("Nuevo Apellido");
 		lblId.setForeground(new Color(0, 0, 0));
 		lblId.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblId.setBounds(147, 134, 106, 14);
 		contentPane.add(lblId);
-		
+
 		JLabel lblPassword = new JLabel("Nueva Password");
 		lblPassword.setForeground(new Color(0, 0, 0));
 		lblPassword.setFont(new Font("SansSerif", Font.BOLD, 12));
 		lblPassword.setBounds(147, 174, 124, 21);
 		contentPane.add(lblPassword);
-		
+
 		textFieldNombre = new JTextField();
 		textFieldNombre.setForeground(new Color(0, 0, 0));
 		textFieldNombre.setFont(new Font("SansSerif", Font.BOLD, 12));
 		textFieldNombre.setBounds(281, 85, 115, 21);
 		contentPane.add(textFieldNombre);
 		textFieldNombre.setColumns(10);
-		
+
 		textFieldApe = new JTextField();
 		textFieldApe.setForeground(new Color(0, 0, 0));
 		textFieldApe.setFont(new Font("SansSerif", Font.BOLD, 12));
 		textFieldApe.setBounds(281, 131, 115, 21);
 		contentPane.add(textFieldApe);
 		textFieldApe.setColumns(10);
-		
+
 		passFieldPass = new JPasswordField();
 		passFieldPass.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed( KeyEvent e ) {
-				
+
 				if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
 
-					elBoton = "ACEPTAR";
-					setVisible( false );
+					if ( todoOK() ) {
+
+						elBoton = "ACEPTAR";
+						setVisible( false );
+					}
 
 				}
 			}
@@ -132,36 +152,27 @@ public class EditarPerfil extends JDialog {
 		passFieldPass.setBounds(281, 174, 115, 21);
 		contentPane.add(passFieldPass);
 		passFieldPass.setColumns(10);
-		
+
 		JButton btnNewButton = new JButton("Aceptar");
 		btnNewButton.setForeground(new Color(0, 0, 0));
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				if (textFieldNombre.getText().isEmpty() || textFieldApe.getText().isEmpty()  
-					|| passFieldPass.getText().isEmpty() ){
-					
-					labelAviso.setText( "Faltan campos" );
-					return;
-					
+
+				if ( todoOK() ) {
+
+					elBoton = "ACEPTAR";
+					setVisible( false );
 				}
-				
-				if ( passFieldPass.getText().length() < 5 ) {
-					
-					labelAviso.setText( "5 caracteres minimo" );
-					return;
-				}
-				
-				elBoton = "ACEPTAR";
-				setVisible( false );
-				
+
+				return;
+
 			}
 		});
 		btnNewButton.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnNewButton.setBounds(182, 241, 89, 23);
 		contentPane.add(btnNewButton);
-		
+
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.setForeground(new Color(0, 0, 0));
 		btnCancelar.addMouseListener(new MouseAdapter() {
@@ -174,7 +185,7 @@ public class EditarPerfil extends JDialog {
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 11));
 		btnCancelar.setBounds(318, 241, 89, 23);
 		contentPane.add(btnCancelar);
-		
+
 		labelAviso = new JLabel("");
 		labelAviso.setHorizontalAlignment(SwingConstants.CENTER);
 		labelAviso.setForeground(new Color(153, 0, 0));
@@ -182,5 +193,5 @@ public class EditarPerfil extends JDialog {
 		labelAviso.setBounds(281, 32, 281, 21);
 		contentPane.add(labelAviso);
 	}
-	
+
 }

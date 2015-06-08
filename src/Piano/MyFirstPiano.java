@@ -18,8 +18,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -693,7 +697,7 @@ public class MyFirstPiano extends JFrame {
 
 		lblIduser = new JLabel("");
 		lblIduser.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblIduser.setBounds(95, 342, 304, 25);
+		lblIduser.setBounds(111, 342, 304, 25);
 		contentPane.add(lblIduser);
 
 		lblParar = new JLabel("Stop");
@@ -718,6 +722,9 @@ public class MyFirstPiano extends JFrame {
 		rec_btn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+
+				listaTeclas.removeAll(listaTeclas);
+				listaParaGuardar.removeAll(listaParaGuardar);
 
 				if ( !rec_btn.isEnabled() ) {
 
@@ -814,8 +821,8 @@ public class MyFirstPiano extends JFrame {
 		contentPane.add(lblGrabando);
 
 		lblUser = new JLabel("User:");
-		lblUser.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblUser.setBounds(39, 342, 46, 25);
+		lblUser.setFont(new Font("SansSerif", Font.BOLD, 15));
+		lblUser.setBounds(39, 342, 62, 25);
 		contentPane.add(lblUser);
 
 		lblImgConect = new JLabel("");
@@ -904,7 +911,7 @@ public class MyFirstPiano extends JFrame {
 			}
 		});
 		btnMisMelodias.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnMisMelodias.setBounds(1031, 33, 124, 25);
+		btnMisMelodias.setBounds(996, 33, 159, 25);
 		contentPane.add(btnMisMelodias);
 	}
 
@@ -958,36 +965,40 @@ public class MyFirstPiano extends JFrame {
 
 		URL url = getClass().getResource(nombreNota);
 
-		try{
+		//		try{
+		//
+		//			clip = AudioSystem.getClip();				 
+		//
+		//			clip.open( AudioSystem.getAudioInputStream( url ));
+		//
+		//			clip.start();
+		//
+		//			//Thread.sleep(clip.getMicrosecondLength()/1000);
+		//		}
+		//		catch(Exception e){
+		//			
+		//			e.printStackTrace();
+		//		}
 
-			clip = AudioSystem.getClip();				 
+		try {
 
-			clip.open( AudioSystem.getAudioInputStream( url ));
-
+			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
+			AudioFormat format = soundIn.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			clip = (Clip) AudioSystem.getLine(info);
+			clip.open(soundIn);
 			clip.start();
+			while( clip.isRunning() ){
 
-			//Thread.sleep(clip.getMicrosecondLength()/1000);
-		}
-		catch(Exception e){
+				Thread.yield();
+			}
+
+		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
+	}
 
-	}
-	private static void addPopup(Component component, final JPopupMenu popup) {
-		component.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			public void mouseReleased(MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					showMenu(e);
-				}
-			}
-			private void showMenu(MouseEvent e) {
-				popup.show(e.getComponent(), e.getX(), e.getY());
-			}
-		});
-	}
+
 }
+

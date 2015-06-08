@@ -4,8 +4,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 import Piano.Reproductor.HeAcabadoListener;
 
@@ -34,17 +37,19 @@ public class Reproductor {
 		t.start();
 	}
 
-	private void run(HeAcabadoListener l) {
+	private void run( HeAcabadoListener l ) {
 		int tickPorElQueVoy = 0;
-		fuera:
+		//		fuera:
 		while( listaQueDeboTocar.size() > 0 ){
 
 			if( meHanPedidoQuePare() ){
 				System.out.println("ME SALGO PORQUE YA NO HAY QUE SEGUIR TOCANDO");
-				break fuera;
+				//					break fuera;
+				return;
 			}
+
 			Pulsacion p = listaQueDeboTocar.get( 0 );
-			
+
 			if( p.getTick() <= tickPorElQueVoy ){
 				playSound( p.getNombreNota() );
 				listaQueDeboTocar.remove( 0 );
@@ -58,6 +63,7 @@ public class Reproductor {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+
 		}
 		System.out.println("Ya he acabado");
 
@@ -76,19 +82,41 @@ public class Reproductor {
 
 	private void playSound( String nombreNota ) {
 
+		//		URL url = getClass().getResource(nombreNota);
 
-		URL url = getClass().getResource(nombreNota);
+		//		try{
+		//
+		//			clip = AudioSystem.getClip();				 
+		//
+		//			clip.open( AudioSystem.getAudioInputStream( url ));
+		//
+		//			clip.start();
+		//
+		//			//Thread.sleep(clip.getMicrosecondLength()/1000);
+		//		}
+		//		catch(Exception e){
+		//
+		//			e.printStackTrace();
+		//		}
 
-		try{
 
-			clip = AudioSystem.getClip();				 
+		URL url = getClass().getResource(nombreNota);		
 
-			clip.open( AudioSystem.getAudioInputStream( url ));
+		try {
 
+			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
+			AudioFormat format = soundIn.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			clip = (Clip) AudioSystem.getLine(info);
+			clip.open(soundIn);
 			clip.start();
+			while( clip.isRunning() ){
 
-		}
-		catch(Exception e){
+				Thread.yield();
+			}
+
+		} catch (Exception e) {
+
 			e.printStackTrace();
 		}
 

@@ -42,6 +42,8 @@ import Piano.Reproductor.HeAcabadoListener;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MelodiasUsuario extends JFrame {
 
@@ -49,7 +51,7 @@ public class MelodiasUsuario extends JFrame {
 	private EntityManager em;
 	private MelodiaHibernate dao;
 	private PulsacionHibernate pdao;
-	
+
 	private UsuarioHibernate newuser;
 	private Usuario userConectado;
 	private JLabel lblConnected;
@@ -97,6 +99,55 @@ public class MelodiasUsuario extends JFrame {
 		});
 	}
 
+	public void borraMelodia(){
+
+		Melodia m = listPanel.getSelectedValue();
+
+		if ( m == null ) {
+			labelWarn.setText("Seleccione una melodia");
+			return;
+		}
+
+		labelWarn.setText("");
+		ConfirmaBorrar  conf = new ConfirmaBorrar();
+		conf.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
+		conf.setVisible( true );
+		conf.setResizable( false );
+
+		List<Pulsacion> pulsacionesDeMelodiaQBorro;
+
+		pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
+
+		if ( conf.getBotonPulsado() == null ) {
+			System.out.println("Me salgo porque no se ha pulsado nada");
+			return;
+		}
+		if ( conf.getBotonPulsado().equals("SI") ) {
+
+			tx = em.getTransaction();
+			tx.begin();
+
+			for ( Pulsacion p : pulsacionesDeMelodiaQBorro ) {
+
+				pdao.delete( p );					
+			}
+
+			dao.delete(m);
+			tx.commit();
+			DefaultListModel<Melodia> model = (DefaultListModel<Melodia>) listPanel.getModel();
+			model.removeElement( m );
+			//refresco la lista
+			//kaska, no borro melodia de tabla pulsaciones
+
+		}
+		else {
+			System.out.println("No se borra nada");
+			return;
+		}
+
+
+	}
+
 
 
 	/**
@@ -106,7 +157,7 @@ public class MelodiasUsuario extends JFrame {
 	public MelodiasUsuario(MouseAdapter mouseAdapter) {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MelodiasUsuario.class.getResource("/Piano/logo.png")));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 678, 452);
+		setBounds(100, 100, 761, 489);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(51, 153, 102));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -126,6 +177,21 @@ public class MelodiasUsuario extends JFrame {
 		panelCentro.add(scrollBar);
 
 		listPanel = new JList();
+		listPanel.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed( KeyEvent e ) {
+
+				if (e.getKeyCode() == KeyEvent.VK_DELETE) {
+					System.out.println("se ha pulsado suprimir");
+
+					borraMelodia();
+				}
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+
+					reproduce();
+				}
+			}
+		});
 		listPanel.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(0, 0, 0)));
 		listPanel.setFont(new Font("SansSerif", Font.BOLD, 13));
 		listPanel.setBounds(10, 11, 433, 242);
@@ -133,49 +199,28 @@ public class MelodiasUsuario extends JFrame {
 		listPanel.setCellRenderer(new ListaMelodiasRenderer() );
 
 		btnReproducir = new JButton("Reproducir");
+		btnReproducir.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				if ( e.getKeyCode() == KeyEvent.VK_ENTER ) {
+
+					reproduce();
+				}
+			}
+		});
 		btnReproducir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed( MouseEvent e ) {
 
-				System.out.println( btnReproducir.getText() );
-
-				if ( btnReproducir.getText().equals("Parar")) {
-
-					r.setPararMelodia( true );
-				}
-
-				Melodia m = listPanel.getSelectedValue();
-
-				if ( m == null ) {
-					labelWarn.setText("Debes seleccionar una melodia");
-				}
-
-				else{
-					
-					labelWarn.setText("");
-					btnReproducir.setText("Parar");
-
-					r = new Reproductor();
-					r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
-
-					r.tocaMelodia( new HeAcabadoListener() {
-
-						@Override
-						public void heAcabado() {
-
-							btnReproducir.setText( "Reproducir" ); 
-						}
-					});
-				}
-
+				reproduce();
 			}
+
 		});
-
-
 
 		btnReproducir.setForeground(new Color(0, 0, 0));
 		btnReproducir.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnReproducir.setBounds(552, 100, 100, 30);
+		btnReproducir.setBounds(552, 100, 134, 30);
 		contentPane.add(btnReproducir);
 
 		btnBorrar = new JButton("Borrar");
@@ -183,56 +228,14 @@ public class MelodiasUsuario extends JFrame {
 			@Override
 			public void mousePressed(MouseEvent e) {
 
-				Melodia m = listPanel.getSelectedValue();
-
-				if ( m == null ) {
-					labelWarn.setText("Seleccione una melodia");
-					return;
-				}
-
-				labelWarn.setText("");
-				ConfirmaBorrar  conf = new ConfirmaBorrar();
-				conf.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
-				conf.setVisible( true );
-				conf.setResizable( false );
-
-				List<Pulsacion> pulsacionesDeMelodiaQBorro;
-
-				pulsacionesDeMelodiaQBorro = dao.pulsacionesDeMelodia( m );
-
-				if ( conf.getBotonPulsado() == null ) {
-					System.out.println("Me salgo porque no se ha pulsado nada");
-					return;
-				}
-				if ( conf.getBotonPulsado().equals("SI") ) {
-
-					tx = em.getTransaction();
-					tx.begin();
-
-					for ( Pulsacion p : pulsacionesDeMelodiaQBorro ) {
-
-						pdao.delete( p );					
-					}
-
-					dao.delete(m);
-					tx.commit();
-					DefaultListModel<Melodia> model = (DefaultListModel<Melodia>) listPanel.getModel();
-					model.removeElement( m );
-					//refresco la lista
-					//kaska, no borro melodia de tabla pulsaciones
-
-				}
-				else {
-					System.out.println("No se borra nada");
-					return;
-				}
+				borraMelodia();
 
 			}
 
 		});
 		btnBorrar.setForeground(new Color(0, 0, 0));
 		btnBorrar.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnBorrar.setBounds(552, 178, 100, 30);
+		btnBorrar.setBounds(552, 178, 134, 30);
 		contentPane.add(btnBorrar);
 
 		btnEditar = new JButton("Editar");
@@ -286,7 +289,7 @@ public class MelodiasUsuario extends JFrame {
 
 		btnEditar.setForeground(new Color(0, 0, 0));
 		btnEditar.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnEditar.setBounds(552, 254, 100, 30);
+		btnEditar.setBounds(552, 254, 134, 30);
 		contentPane.add(btnEditar);
 
 		lblConnected = new JLabel("");
@@ -316,37 +319,37 @@ public class MelodiasUsuario extends JFrame {
 				edit.setModalityType( Dialog.ModalityType.APPLICATION_MODAL );
 				edit.setVisible( true );
 				edit.setResizable( false );
-				
+
 				if ( edit.getBotonPulsado() == null ) {
 					return;
 				}
 				if (  edit.getBotonPulsado().equals("CANCELAR") ) {
 					return;
 				}
-				
+
 				if (  edit.getBotonPulsado().equals("ACEPTAR") ) {
-					
+
 					labelWarn.setText("Usuario modificado con exito");
 					newuser = new UsuarioHibernate(em);
-					
+
 					userConectado = newuser.findByPrimaryKey(userConectado);
-					
+
 					System.out.println("Nombre: " + userConectado.getNombre() + " " + "ID: " + userConectado.getIDUser());
 					userConectado.setNombre( edit.getNewName() );
 					userConectado.setApellido( edit.getNewApe() );
 					userConectado.setPassword( edit.getNewPass() );
-					
+
 					System.out.println("Nombre: " + userConectado.getNombre() + " " + "ID: " + userConectado.getIDUser());
-					
-					
+
+
 					if ( !tx.isActive() ) {
 						tx.begin();
 					}
-					
+
 					em.persist(userConectado);
 					tx.commit();				
-					
-					
+
+
 				}
 			}
 		});
@@ -354,7 +357,7 @@ public class MelodiasUsuario extends JFrame {
 		btnEdit.setFont(new Font("SansSerif", Font.BOLD, 12));
 		btnEdit.setHorizontalAlignment(SwingConstants.CENTER);
 
-		btnEdit.setBounds(552, 358, 100, 30);
+		btnEdit.setBounds(552, 358, 134, 30);
 		contentPane.add(btnEdit);
 
 
@@ -396,4 +399,41 @@ public class MelodiasUsuario extends JFrame {
 		lblNombreUser.setText(userConectado.getIDUser() );
 
 	}
+
+	public void reproduce() {
+
+		System.out.println( btnReproducir.getText() );
+
+		if ( btnReproducir.getText().equals("Parar")) {
+
+			r.setPararMelodia( true );
+		}
+
+		Melodia m = listPanel.getSelectedValue();
+
+		if ( m == null ) {
+			labelWarn.setText("Debes seleccionar una melodia");
+		}
+
+		else{
+
+			labelWarn.setText("");
+			btnReproducir.setText("Parar");
+
+			r = new Reproductor();
+			r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
+
+			r.tocaMelodia( new HeAcabadoListener() {
+
+				@Override
+				public void heAcabado() {
+
+					btnReproducir.setText( "Reproducir" ); 
+				}
+			});
+		}
+
+
+	}
+
 }
