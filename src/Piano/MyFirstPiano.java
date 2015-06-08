@@ -965,38 +965,38 @@ public class MyFirstPiano extends JFrame {
 
 		URL url = getClass().getResource(nombreNota);
 
-		try{
+//		try{
+//
+//			clip = AudioSystem.getClip();				 
+//
+//			clip.open( AudioSystem.getAudioInputStream( url ));
+//
+//			clip.start();
+//
+//			//Thread.sleep(clip.getMicrosecondLength()/1000);
+//		}
+//		catch(Exception e){
+//
+//			e.printStackTrace();
+//		}
 
-			clip = AudioSystem.getClip();				 
+		try {
 
-			clip.open( AudioSystem.getAudioInputStream( url ));
-
+			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
+			AudioFormat format = soundIn.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			clip = (Clip) AudioSystem.getLine(info);
+			clip.open(soundIn);
 			clip.start();
+			while( clip.isRunning() ){
 
-			//Thread.sleep(clip.getMicrosecondLength()/1000);
-		}
-		catch(Exception e){
+				Thread.yield();
+			}
+
+		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
-
-		//		try {
-		//
-		//			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
-		//			AudioFormat format = soundIn.getFormat();
-		//			DataLine.Info info = new DataLine.Info(Clip.class, format);
-		//			clip = (Clip) AudioSystem.getLine(info);
-		//			clip.open(soundIn);
-		//			clip.start();
-		//			while( clip.isRunning() ){
-		//
-		//				Thread.yield();
-		//			}
-		//
-		//		} catch (Exception e) {
-		//
-		//			e.printStackTrace();
-		//		}
 	}
 
 

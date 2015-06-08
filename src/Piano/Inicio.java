@@ -68,7 +68,7 @@ public class Inicio extends JFrame {
 	 */
 	public static void main(String[] args) {
 
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("derby");
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("oracle");
 		final EntityManager em = emf.createEntityManager();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -132,6 +132,7 @@ public class Inicio extends JFrame {
 		lblNewLabel.setForeground(new Color(0, 0, 0));
 		lblNewLabel.setBackground(new Color(0, 0, 0));
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel.fill = GridBagConstraints.VERTICAL;
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel.gridx = 1;
@@ -173,6 +174,7 @@ public class Inicio extends JFrame {
 		lblPassword.setBackground(new Color(0, 0, 0));
 		lblPassword.setFont(new Font("SansSerif", Font.BOLD, 15));
 		GridBagConstraints gbc_lblPassword = new GridBagConstraints();
+		gbc_lblPassword.anchor = GridBagConstraints.EAST;
 		gbc_lblPassword.insets = new Insets(0, 0, 5, 5);
 		gbc_lblPassword.fill = GridBagConstraints.VERTICAL;
 		gbc_lblPassword.gridx = 1;
