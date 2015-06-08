@@ -64,7 +64,7 @@ public class MelodiasUsuario extends JFrame {
 	private JScrollBar scrollBar;
 	private List<Pulsacion> pulsacionesReproducir;
 	private JLabel labelWarn;
-	Reproductor r;
+	Reproductor r = new Reproductor();
 
 	EntityTransaction tx;
 	private class ListaMelodiasRenderer extends DefaultListCellRenderer {
@@ -408,6 +408,9 @@ public class MelodiasUsuario extends JFrame {
 
 			r.setPararMelodia( true );
 		}
+		else {
+			r.setPararMelodia( false );
+		}
 
 		Melodia m = listPanel.getSelectedValue();
 
@@ -420,7 +423,7 @@ public class MelodiasUsuario extends JFrame {
 			labelWarn.setText("");
 			btnReproducir.setText("Parar");
 
-			r = new Reproductor();
+			
 			r.setListaPulsaciones( pdao.getPulsacionesDeMelodia( m ) );
 
 			r.tocaMelodia( new HeAcabadoListener() {
@@ -429,6 +432,7 @@ public class MelodiasUsuario extends JFrame {
 				public void heAcabado() {
 
 					btnReproducir.setText( "Reproducir" ); 
+					return;
 				}
 			});
 		}

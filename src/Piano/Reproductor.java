@@ -45,6 +45,7 @@ public class Reproductor {
 			if( meHanPedidoQuePare() ){
 				System.out.println("ME SALGO PORQUE YA NO HAY QUE SEGUIR TOCANDO");
 				//					break fuera;
+				l.heAcabado();
 				return;
 			}
 
@@ -82,43 +83,43 @@ public class Reproductor {
 
 	private void playSound( String nombreNota ) {
 
-		//		URL url = getClass().getResource(nombreNota);
+		URL url = getClass().getResource(nombreNota);
 
-		//		try{
-		//
-		//			clip = AudioSystem.getClip();				 
-		//
-		//			clip.open( AudioSystem.getAudioInputStream( url ));
-		//
-		//			clip.start();
-		//
-		//			//Thread.sleep(clip.getMicrosecondLength()/1000);
-		//		}
-		//		catch(Exception e){
-		//
-		//			e.printStackTrace();
-		//		}
+		try{
 
+			clip = AudioSystem.getClip();				 
 
-		URL url = getClass().getResource(nombreNota);		
+			clip.open( AudioSystem.getAudioInputStream( url ));
 
-		try {
-
-			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
-			AudioFormat format = soundIn.getFormat();
-			DataLine.Info info = new DataLine.Info(Clip.class, format);
-			clip = (Clip) AudioSystem.getLine(info);
-			clip.open(soundIn);
 			clip.start();
-			while( clip.isRunning() ){
 
-				Thread.yield();
-			}
-
-		} catch (Exception e) {
+			//Thread.sleep(clip.getMicrosecondLength()/1000);
+		}
+		catch(Exception e){
 
 			e.printStackTrace();
 		}
+
+
+		//		URL url = getClass().getResource(nombreNota);		
+		//
+		//		try {
+		//
+		//			AudioInputStream soundIn = AudioSystem.getAudioInputStream(url);
+		//			AudioFormat format = soundIn.getFormat();
+		//			DataLine.Info info = new DataLine.Info(Clip.class, format);
+		//			clip = (Clip) AudioSystem.getLine(info);
+		//			clip.open(soundIn);
+		//			clip.start();
+		//			while( clip.isRunning() ){
+		//
+		//				Thread.yield();
+		//			}
+		//
+		//		} catch (Exception e) {
+		//
+		//			e.printStackTrace();
+		//		}
 
 	}
 

@@ -170,7 +170,7 @@ public class EditarPerfil extends JDialog {
 			}
 		});
 		btnNewButton.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnNewButton.setBounds(182, 241, 89, 23);
+		btnNewButton.setBounds(164, 241, 106, 23);
 		contentPane.add(btnNewButton);
 
 		JButton btnCancelar = new JButton("Cancelar");
@@ -183,7 +183,7 @@ public class EditarPerfil extends JDialog {
 			}
 		});
 		btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 11));
-		btnCancelar.setBounds(318, 241, 89, 23);
+		btnCancelar.setBounds(328, 241, 115, 23);
 		contentPane.add(btnCancelar);
 
 		labelAviso = new JLabel("");
