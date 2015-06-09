@@ -61,6 +61,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JTextField;
 
+import Piano.Reproductor.HeAcabadoListener;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
@@ -798,7 +800,14 @@ public class MyFirstPiano extends JFrame {
 
 					Reproductor r = new Reproductor();
 					r.setListaPulsaciones(listaParaGuardar);
-					r.tocaMelodia( null );
+					r.tocaMelodia(new HeAcabadoListener() {
+						
+						@Override
+						public void heAcabado() {
+							
+							lblGrabando.setText("Done.");
+						}
+					} );
 
 					if ( !btnGuardar.isEnabled() ) {
 
